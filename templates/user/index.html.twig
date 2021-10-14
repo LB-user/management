@@ -20,42 +20,43 @@
 
 
 					{% for user in users %}
-						{% if app.user.id == user.id %}
-						
-							<tr class="table-active">
-								<th scope="row">{{ user.id }}</th>
-								<td>{{ user.firstname }}
-									{{ user.lastname }}</td>
-								<td>
-									<a class="btn btn-info" href="{{ path('user_show', {'id': user.id}) }}">
-										<i class="fas fa-eye"></i>
-									</a>
-									<a class="btn btn-secondary" href="{{ path('user_edit', {'id': user.id}) }}">
-										<i class="fas fa-pen"></i>
-									</a>
-								</td>
-							</tr>
-							{% for child in user.childrens %}
-					
+						{% if (app.user.id is defined) and (user.id is defined) %}
+							{% if app.user.id == user.id %}
+
 								<tr class="table-active">
-									<th scope="row">{{ child.id }}</th> 
-									
-									<td>{{ child.firstname }}
-										{{ child.lastname }}</td>
+									<th scope="row">{{ user.id }}</th>
+									<td>{{ user.firstname }}
+										{{ user.lastname }}</td>
 									<td>
-										<a class="btn btn-info" href="{{ path('user_show', {'id': child.id}) }}">
+										<a class="btn btn-info" href="{{ path('user_show', {'id': user.id}) }}">
 											<i class="fas fa-eye"></i>
 										</a>
-										<a class="btn btn-secondary" href="{{ path('user_edit', {'id': child.id}) }}">
+										<a class="btn btn-secondary" href="{{ path('user_edit', {'id': user.id}) }}">
 											<i class="fas fa-pen"></i>
 										</a>
 									</td>
 								</tr>
-							{% endfor %}
+								{% for child in user.childrens %}
+
+									<tr class="table-active">
+										<th scope="row">{{ child.id }}</th>
+
+										<td>{{ child.firstname }}
+											{{ child.lastname }}</td>
+										<td>
+											<a class="btn btn-info" href="{{ path('user_show', {'id': child.id}) }}">
+												<i class="fas fa-eye"></i>
+											</a>
+											<a class="btn btn-secondary" href="{{ path('user_edit', {'id': child.id}) }}">
+												<i class="fas fa-pen"></i>
+											</a>
+										</td>
+									</tr>
+								{% endfor %}
+							{% endif %}
 						{% endif %}
 					{% endfor %}
-					
-                    
+
 
 				</tbody>
 			</table>

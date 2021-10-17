@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit user
-{% endblock %}
+{# {% if app.user.id == user.id or is_granted(ROLE_ADMIN)%} #}
 
 {% block body %}
+{{ dump(app.request.uri) }}
 	<div class="container">
 		<h1>Modifier les informations</h1>
 
@@ -14,3 +14,6 @@
 		{{ include('user/_delete_form.html.twig') }}
 	</div>
 {% endblock %}
+{# {% else %}
+	{% do redirect('user') %}
+{% endif %} #}

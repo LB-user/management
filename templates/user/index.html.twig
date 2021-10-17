@@ -1,12 +1,72 @@
-{% extends 'base.html.twig' %}
+{% extends "base.html.twig" %}
 
-{% block title %}Users
+{% block title %}Gestion
 {% endblock %}
 
 {% block body %}
 	<div class="container">
 		<div class="overflow-auto">
-			<h1>Users</h1>
+			<h1>Gestion du personnel</h1>
+
+			<h2>Gestion</h2>
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">Nom</th>
+						<th scope="col">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					{% for user in users %}
+						{% if (app.user.id is defined) and (user.id is defined) %}
+							{% if app.user.id == user.id %}
+
+								<tr class="table-active">
+									<th scope="row">{{ user.id }}</th>
+									<td>{{ user.firstname }}
+										{{ user.lastname }}</td>
+									<td>
+										<a class="btn btn-info" href="{{ path("user_show", {"id": user.id}) }}">
+											<i class="fas fa-eye"></i>
+										</a>
+										{% if is_granted("ROLE_SUPER_ADMIN") or (app.user.id is defined) and (user.id is defined) %}
+											<a class="btn btn-secondary" href="{{ path("user_edit", {"id": user.id}) }}">
+												<i class="fas fa-pen"></i>
+											</a>
+										{% endif %}
+									</td>
+								</tr>
+								{% for child in user.childrens %}
+									{% if app.user.id != child.id %}
+
+										<tr class="table-active">
+											<th scope="row">{{ child.id }}</th>
+
+											<td>{{ child.firstname }}
+												{{ child.lastname }}</td>
+											<td>
+												<a class="btn btn-info" href="{{ path("user_show", {"id": child.id}) }}">
+													<i class="fas fa-eye"></i>
+												</a>
+												{% if is_granted("ROLE_SUPER_ADMIN") %}
+													<a class="btn btn-secondary" href="{{ path("user_edit", {"id": child.id}) }}">
+														<i class="fas fa-pen"></i>
+													</a>
+												{% endif %}
+											</td>
+										</tr>
+									{% endif %}
+								{% endfor %}
+							{% endif %}
+						{% endif %}
+					{% endfor %}
+				</tbody>
+			</tbody>
+		</table>
+		{% if is_granted("ROLE_ADMIN") %}
+			<h2>Candidats</h2>
 
 			<table class="table table-hover">
 				<thead>
@@ -18,52 +78,28 @@
 				</thead>
 				<tbody>
 
-
 					{% for user in users %}
-						{% if (app.user.id is defined) and (user.id is defined) %}
-							{% if app.user.id == user.id %}
-
-								<tr class="table-active">
-									<th scope="row">{{ user.id }}</th>
-									<td>{{ user.firstname }}
-										{{ user.lastname }}</td>
-									<td>
-										<a class="btn btn-info" href="{{ path('user_show', {'id': user.id}) }}">
-											<i class="fas fa-eye"></i>
-										</a>
-										<a class="btn btn-secondary" href="{{ path('user_edit', {'id': user.id}) }}">
-											<i class="fas fa-pen"></i>
-										</a>
-									</td>
-								</tr>
-								{% for child in user.childrens %}
-
-									<tr class="table-active">
-										<th scope="row">{{ child.id }}</th>
-
-										<td>{{ child.firstname }}
-											{{ child.lastname }}</td>
-										<td>
-											<a class="btn btn-info" href="{{ path('user_show', {'id': child.id}) }}">
-												<i class="fas fa-eye"></i>
-											</a>
-											<a class="btn btn-secondary" href="{{ path('user_edit', {'id': child.id}) }}">
-												<i class="fas fa-pen"></i>
-											</a>
-										</td>
-									</tr>
-								{% endfor %}
-							{% endif %}
+						{% if user.parent == NULL %}
+							<tr class="table-active">
+								<th scope="row">{{ user.id }}</th>
+								<td>{{ user.firstname }}
+									{{ user.lastname }}</td>
+								<td>
+									<a class="btn btn-info" href="{{ path("user_show", {"id": user.id}) }}">
+										<i class="fas fa-eye"></i>
+									</a>
+								</td>
+							</tr>
 						{% endif %}
 					{% endfor %}
 
-
 				</tbody>
-			</table>
-
-			<a class="btn btn-primary" href="{{ path('user_new') }}">
-				<i class="fas fa-plus"></i>
-			</a>
-		</div>
-	</div>
-{% endblock %}
+			</tbody>
+		</table>
+	{% endif %}
+	{% if is_granted("ROLE_ADMIN") %}
+		<a class="btn btn-primary" href="{{ path("user_new") }}">
+			<i class="fas fa-plus"></i>
+		</a>
+	{% endif %}
+</div></div>{% endblock %}

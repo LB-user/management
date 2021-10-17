@@ -35,22 +35,22 @@ class RegistrationFormType extends AbstractType
             'type' => PasswordType::class,
             'invalid_message' => 'Le mot de passe et sa confirmation ne corresponde pas',
             'first_options'  => [
-                'label' => 'Password',
+                'label' => 'Mot de passe',
                 'attr' => ['class' => 'w-50 form-control']
             ],
             'second_options' => [
-                'label' => 'Repeat Password',
+                'label' => 'Confirmation de mot de passe',
                 'attr' => ['class' => 'w-50 form-control']
             ]
-        ])
-        ->add('register', SubmitType::class, [
-            'attr' => ['class' => 'mt-2 btn-danger']
         ])
         ->add('address', TextType::class, [
             'attr' => ['class' => 'w-50 form-control'],
         ])
         ->add('phone', TextType::class, [
             'attr' => ['class' => 'w-50 form-control'],
+        ])
+        ->add('register', SubmitType::class, [
+            'attr' => ['class' => 'mt-2 btn-danger']
         ]);
     }
 

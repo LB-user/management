@@ -31,7 +31,7 @@
 					<th>Documents</th>
 					<td><a class="btn btn-primary" href="#">Voir les documents</a></td>
 				</tr>
-                {% if app.user.parent != NULL %}
+                {% if (user.parent != NULL) or (app.user.id == user.id) %}
                 <tr>
 					<th>Entreprise</th>
 					<td><a class="btn btn-primary" href="#">Voir l'entreprise</a></td>

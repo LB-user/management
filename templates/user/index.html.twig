@@ -77,9 +77,8 @@
 					</tr>
 				</thead>
 				<tbody>
-
 					{% for user in users %}
-						{% if user.parent == NULL %}
+						{% if (user.parent == NULL) and (app.user.id != user.id) and (user.roles != ['ROLE_ADMIN']) %}
 							<tr class="table-active">
 								<th scope="row">{{ user.id }}</th>
 								<td>{{ user.firstname }}

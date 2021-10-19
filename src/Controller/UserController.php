@@ -29,22 +29,29 @@ class UserController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+        $user = $this->getUser();
+        if($user)
+        {
+                return $this->redirectToRoute('app_logout');
         }
+        else {
+            $user = new User();
+            $form = $this->createForm(UserType::class, $user);
+            $form->handleRequest($request);
 
-        return $this->renderForm('user/new.html.twig', [
-            'user' => $user,
-            'form' => $form,
-        ]);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->persist($user);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+            }
+
+            return $this->renderForm('user/new.html.twig', [
+                'user' => $user,
+                'form' => $form,
+            ]);
+        }
     }
 
     /**
@@ -64,33 +71,47 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user): Response
     {
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
+        $actualUser = $this->getUser();
+        if(($actualUser->getId() == $user->getId() || $actualUser->getRoles() == ['ROLE_SUPER_ADMIN']))
+        {
+            $form = $this->createForm(UserType::class, $user);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+            }
+
+            return $this->renderForm('user/edit.html.twig', [
+                'user' => $user,
+                'form' => $form,
+            ]);
         }
-
-        return $this->renderForm('user/edit.html.twig', [
-            'user' => $user,
-            'form' => $form,
-        ]);
+        else {
+            return $this->redirectToRoute('user');
+        }
     }
 
     /**
      * @Route("/{id}", name="user_delete", methods={"POST"})
-     * @IsGranted("ROLE_ADMIN")
+     * @IsGranted("ROLE_USER")
      */
     public function delete(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($user);
-            $entityManager->flush();
+        $actualUser = $this->getUser();
+        if(($actualUser->getId() == $user->getId() || $actualUser->getRoles() == ['ROLE_SUPER_ADMIN']))
+        {
+            if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+                $entityManager = $this->getDoctrine()->getManager();
+                $entityManager->remove($user);
+                $entityManager->flush();
+            }
+    
+            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
         }
-
-        return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+        else {
+            return $this->redirectToRoute('user');
+        }
     }
 }

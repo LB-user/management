@@ -30,11 +30,7 @@ class UserController extends AbstractController
     public function new(Request $request): Response
     {
         $user = $this->getUser();
-        if($user)
-        {
-                return $this->redirectToRoute('app_logout');
-        }
-        else {
+
             $user = new User();
             $form = $this->createForm(UserType::class, $user);
             $form->handleRequest($request);
@@ -44,14 +40,13 @@ class UserController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('user_skill', [], Response::HTTP_SEE_OTHER);
             }
 
             return $this->renderForm('user/new.html.twig', [
                 'user' => $user,
                 'form' => $form,
             ]);
-        }
     }
 
     /**

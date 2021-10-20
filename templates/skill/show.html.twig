@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<div class="container">
+		<h1>Utilisateur</h1>
+		<table class="table">
+			<tbody>
+				<tr>
+					<th>Nom de la Compétence</th>
+					<td>{{ skill.name }}</td>
+				</tr>
+                <tr>
+					<th>Niveau</th>
+					<td>{{ skill.level }}</td>
+				</tr>
+			</tbody>
+		</table>
+		<a href="{{ path('skill') }}">Retour à la liste</a>
+	</div>
+
+
+{% endblock %}

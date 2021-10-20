@@ -27,6 +27,12 @@ class UserSkill
      */
     private $user_id;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Skill::class, inversedBy="userSkills")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $skill_id;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +58,18 @@ class UserSkill
     public function setUserId(?User $user_id): self
     {
         $this->user_id = $user_id;
+
+        return $this;
+    }
+
+    public function getSkillId(): ?Skill
+    {
+        return $this->skill_id;
+    }
+
+    public function setSkillId(?Skill $skill_id): self
+    {
+        $this->skill_id = $skill_id;
 
         return $this;
     }

@@ -30,7 +30,7 @@ class Skill
     private $level;
 
     /**
-     * @ORM\OneToMany(targetEntity=UserSkill::class, mappedBy="sill_id")
+     * @ORM\OneToMany(targetEntity=UserSkill::class, mappedBy="skill_id")
      */
     private $userSkills;
 
@@ -80,7 +80,7 @@ class Skill
     {
         if (!$this->userSkills->contains($userSkill)) {
             $this->userSkills[] = $userSkill;
-            $userSkill->setSillId($this);
+            $userSkill->setSkillId($this);
         }
 
         return $this;
@@ -90,8 +90,8 @@ class Skill
     {
         if ($this->userSkills->removeElement($userSkill)) {
             // set the owning side to null (unless already changed)
-            if ($userSkill->getSillId() === $this) {
-                $userSkill->setSillId(null);
+            if ($userSkill->getSkillId() === $this) {
+                $userSkill->setSkillId(null);
             }
         }
 

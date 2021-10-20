@@ -70,9 +70,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $childrens;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UserSkill::class, mappedBy="user_id")
+     */
+    private $userSkills;
+
     public function __construct()
     {
         $this->childrens = new ArrayCollection();
+        $this->userSkills = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -248,6 +254,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($children->getParent() === $this) {
                 $children->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserSkill[]
+     */
+    public function getUserSkills(): Collection
+    {
+        return $this->userSkills;
+    }
+
+    public function addUserSkill(UserSkill $userSkill): self
+    {
+        if (!$this->userSkills->contains($userSkill)) {
+            $this->userSkills[] = $userSkill;
+            $userSkill->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserSkill(UserSkill $userSkill): self
+    {
+        if ($this->userSkills->removeElement($userSkill)) {
+            // set the owning side to null (unless already changed)
+            if ($userSkill->getUserId() === $this) {
+                $userSkill->setUserId(null);
             }
         }
 

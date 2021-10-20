@@ -24,7 +24,6 @@ class UserSkill
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="userSkills")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $user_id;
 

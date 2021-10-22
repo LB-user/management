@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Entity\Skill;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -28,26 +29,6 @@ class UserType extends AbstractType
             'attr' => [
                 'class' => 'w-50 form-control'
         ],
-        ])
-        ->add('email', EmailType::class, [
-            'attr' => [
-                'class' => 'w-50 form-control'
-        ],
-        ])
-        ->add('password', RepeatedType::class, [
-            'attr' => [
-                'class' => 'w-50 form-control'
-        ],
-            'type' => PasswordType::class,
-            'invalid_message' => 'Le mot de passe et sa confirmation ne corresponde pas',
-            'first_options'  => [
-                'label' => 'Mot de passe',
-                'attr' => ['class' => 'w-50 form-control']
-            ],
-            'second_options' => [
-                'label' => 'Confirmation du mot de passe',
-                'attr' => ['class' => 'w-50 form-control']
-            ]
         ])
         ->add('address', TextType::class, [
             'attr' => [

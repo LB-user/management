@@ -286,7 +286,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $userSkill->setUserId(null);
             }
         }
-
         return $this;
     }
 }

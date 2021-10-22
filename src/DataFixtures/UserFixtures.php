@@ -72,4 +72,22 @@ class UserFixtures extends Fixture
 
         return $admin;
     }
+
+    private function createSuperAdminUser(): User
+    {
+        $admin = new User;
+
+        $admin
+        ->setEmail('z.z@z.fr')
+        ->setRoles(['ROLE_SUPER_ADMIN'])
+        ->setPassword(
+            $this->userPasswordHasher->hashPassword($admin, 'z')
+        )
+        ->setFirstname('Z')
+        ->setLastname('Z')
+        ->setAddress('Pas là non plus')
+        ->setPhone('23.38.85.18.15');
+
+        return $admin;
+    }
 }

@@ -4,12 +4,13 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\Form\UserHierarchyType;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class UserController extends AbstractController
 {
@@ -67,7 +68,7 @@ class UserController extends AbstractController
     public function edit(Request $request, User $user): Response
     {
         $actualUser = $this->getUser();
-        if(($actualUser->getId() == $user->getId() || $actualUser->getRoles() == ['ROLE_SUPER_ADMIN']))
+        if($actualUser->getId() == $user->getId() || $actualUser->getRoles() == ['ROLE_SUPER_ADMIN'])
         {
             $form = $this->createForm(UserType::class, $user);
             $form->handleRequest($request);
@@ -79,6 +80,33 @@ class UserController extends AbstractController
             }
 
             return $this->renderForm('user/edit.html.twig', [
+                'user' => $user,
+                'form' => $form,
+            ]);
+        }
+        else {
+            return $this->redirectToRoute('user');
+        }
+    }
+
+        /**
+     * @Route("/{id}/edit_team", name="user_edit_team", methods={"GET","POST"})
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function editTeam(Request $request, User $user): Response
+    {
+        $actualUser = $this->getUser();
+        if($actualUser->getId() != $user->getId())
+        {
+            $form = $this->createForm(UserHierarchyType::class, $user);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->getDoctrine()->getManager()->flush();
+
+                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+            }
+            return $this->renderForm('user/edit_team.html.twig', [
                 'user' => $user,
                 'form' => $form,
             ]);
@@ -102,7 +130,6 @@ class UserController extends AbstractController
                 $entityManager->remove($user);
                 $entityManager->flush();
             }
-    
             return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
         }
         else {

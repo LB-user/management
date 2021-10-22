@@ -1,0 +1,12 @@
+{{ form_start(form) }}
+
+{% if is_granted("ROLE_ADMIN") %}
+	 {{ form_row(form.parent, {
+                label: 'Commercial responsable : '
+        }) }}
+	{{ form_row(form.register, {
+                label: 'Modifier'
+        }) }}
+{% endif %}
+
+{{ form_end(form) }}

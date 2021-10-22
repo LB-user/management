@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	<div class="container">
+		<h1>Modifier les informations</h1>
+		{{ include('user/_form_team.html.twig', {'button_label': 'Update'}) }}
+		<a href="{{ path('user') }}">Retour à la liste</a>
+	</div>
+{% endblock %}

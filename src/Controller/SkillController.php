@@ -91,10 +91,10 @@ class SkillController extends AbstractController
                 $entityManager->flush();
             }
     
-            return $this->redirectToRoute('skill', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
         }
         else {
-            return $this->redirectToRoute('skill');
+            return $this->redirectToRoute('user');
         }
     }
 }

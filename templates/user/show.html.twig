@@ -22,13 +22,17 @@
 											<div class="card-body">
 												<h5 class="card-title">{{userskill.getSkillId().getName()}}</h5>
 												<h6 class="card-subtitle mb-2 text-muted">{{userskill.getSkillId().getLevel()}}</h6>
-												<p class="card-text"></p>
-												<a href="{{ path("user_skill_edit", {"id": userskill.getSkillId().getId()}) }}" class="card-link">Modifier</a>
-												<a href="{{ path("user_skill_delete", {"id": userskill.getSkillId().getId()}) }}" class="card-link">Supprimer</a>
+												{% if userskill.getSkillId().getLiked() %}
+															<p class="card-text">Aime</p>
+														{% else %}
+															<p class="card-text">N'aime pas</p>
+														{% endif %}
+												<a href="{{ path("skill_edit", {"id": userskill.getSkillId().getId()}) }}" class="card-link">Modifier</a>
+												<a href="{{ path("skill_delete", {"id": userskill.getSkillId().getId()}) }}" class="card-link">Supprimer</a>
 											</div>
 										</div>
 									{% endfor %}
-									<a href="{{ path("user_skill_new") }}" class="card-link">Ajouter une compétence</a>
+									<a href="{{ path("skill_new") }}" class="card-link">Ajouter une compétence</a>
 									</div>
 								</div>
 							</div>

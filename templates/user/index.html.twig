@@ -65,66 +65,66 @@
 				{% elseif  is_granted("ROLE_ADMIN") %}
 					<h2>Collaborateurs</h2>
 					{% for user in users %}
-						{% if app.user.id == user.id %}
-							{% for child in user.childrens %}
-								{% if app.user.id != child.id %}
-
-									<div class="col">
-										<div class="card h-100">
-											<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
-											<div class="card-body">
-												<div class="container">
-													{% for userskill in child.userSkills %}
-														<p>
-															{{ dump(userskill.getLiked()) }}
-														</p>
+						{% for child in user.childrens %}
+							{% if app.user.id != child.id %}
+								<div class="col">
+									<div class="card h-100">
+										<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
+										<p class="card-body">
+											<div class="container">
+												{% for userskill in child.userSkills %}
+													{% if userskill.getSkillId().getLiked() %}
 														<span class="badge bg-primary">{{userskill.getSkillId().getName()}}</span>
-													{% endfor %}
-												</div>
+													{% else %}
+														<span class="badge bg-danger">{{userskill.getSkillId().getName()}}</span>
+													{% endif %}
+												{% endfor %}
+											</div>
+											<div class="card-body">
 												<h5 class="card-title">{{ child.firstname }}
 													{{ child.lastname }}</h5>
 												<a class="btn btn-info" href="{{ path("user_show", {"id": child.id}) }}">Details</a>
 												<a class="btn btn-secondary" href="{{ path("user_edit_team", {"id": child.id}) }}">Modifier</a>
 												<a class="btn btn-danger" href="{{ path('user_delete', {'id': child.id}) }}">Supprimer</a>
-											</div>
-										</div>
-									</div>
-								{% endif %}
-							{% endfor %}
-						{% endif %}
-					{% endfor %}
-				</div>
-			</div>
-		</div>
-		<div class="card text-center">
-			<div class="card-body overflow-auto">
-				<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
-					<h2>Candidats</h2>
-					{% for user in users %}
-						{% if (user.parent == NULL) and (user.roles == ['ROLE_USER']) %}
-							<div class="col">
-								<div class="card h-100">
-									<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
-									<div class="card-body">
-										<h5 class="card-title">{{ user.firstname }}
-											{{ user.lastname }}</h5>
-										<p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-										<a class="btn btn-info" href="{{ path("user_show", {"id": user.id}) }}">Details</a>
-										<a class="btn btn-secondary" href="{{ path("user_edit_team", {"id": user.id}) }}">Modifier</a>
-										<a class="btn btn-danger" href="{{ path('user_delete', {'id': user.id}) }}">Supprimer</a>
+											</p>
+										</p>
 									</div>
 								</div>
 							</div>
 						{% endif %}
 					{% endfor %}
-				</div>
+				{% endfor %}
 			</div>
 		</div>
-		{% else %}
-	{% endif %}
-	{% if is_granted("ROLE_ADMIN") %}
-		<a class="btn btn-primary" href="{{ path("user_new") }}">
-			Créer un nouveau profil +
-		</a>
-	{% endif %}
-</div></div></div>{% endblock %}
+	</div>
+	<div class="card text-center">
+		<div class="card-body overflow-auto">
+			<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
+				<h2>Candidats</h2>
+				{% for user in users %}
+					{% if (user.parent == NULL) and (user.roles == ['ROLE_USER']) %}
+						<div class="col">
+							<div class="card h-100">
+								<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
+								<div class="card-body">
+									<h5 class="card-title">{{ user.firstname }}
+										{{ user.lastname }}</h5>
+									<p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+									<a class="btn btn-info" href="{{ path("user_show", {"id": user.id}) }}">Details</a>
+									<a class="btn btn-secondary" href="{{ path("user_edit_team", {"id": user.id}) }}">Modifier</a>
+									<a class="btn btn-danger" href="{{ path('user_delete', {'id': user.id}) }}">Supprimer</a>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+	{% else %}
+{% endif %}
+{% if is_granted("ROLE_ADMIN") %}
+	<a class="btn btn-primary" href="{{ path("user_new") }}">
+		Créer un nouveau profil +
+	</a>
+{% endif %}</div></div></div>{% endblock %}

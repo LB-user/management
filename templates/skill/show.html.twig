@@ -10,13 +10,23 @@
 					<th>Nom de la Compétence</th>
 					<td>{{ skill.name }}</td>
 				</tr>
-                <tr>
+				<tr>
 					<th>Niveau</th>
 					<td>{{ skill.level }}</td>
 				</tr>
+				<tr>
+					<th>Appréciation</th>
+					<td>
+						{% if skill.liked %}
+							Aime
+						{% else %}
+							N'aime pas
+						{% endif %}
+					</td>
+				</tr>
 			</tbody>
 		</table>
-		<a href="{{ path('skill') }}">Retour à la liste</a>
+		<a href="{{ path('user') }}">Retour à la liste</a>
 	</div>
 
 

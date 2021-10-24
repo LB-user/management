@@ -20,6 +20,7 @@ class UserHierarchyType extends AbstractType
                 'expanded' => false,
                 'multiple' => false,
                 'choice_label' => 'lastname',
+                'required' => false,
                 'query_builder' => function (EntityRepository $er) {
                     return $er->createQueryBuilder('u')                 
                     ->orderBy('u.lastname', 'ASC');

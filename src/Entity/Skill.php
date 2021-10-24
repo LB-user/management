@@ -34,6 +34,11 @@ class Skill
      */
     private $userSkills;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $Liked;
+
     public function __construct()
     {
         $this->userSkills = new ArrayCollection();
@@ -94,6 +99,18 @@ class Skill
                 $userSkill->setSkillId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLiked(): ?int
+    {
+        return $this->Liked;
+    }
+
+    public function setLiked(int $Liked): self
+    {
+        $this->Liked = $Liked;
 
         return $this;
     }

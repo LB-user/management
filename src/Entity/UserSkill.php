@@ -28,6 +28,16 @@ class UserSkill
      */
     private $skill_id;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $liked;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $level;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -53,6 +63,30 @@ class UserSkill
     public function setSkillId(?Skill $skill_id): self
     {
         $this->skill_id = $skill_id;
+
+        return $this;
+    }
+
+    public function getLiked(): ?int
+    {
+        return $this->liked;
+    }
+
+    public function setLiked(int $liked): self
+    {
+        $this->liked = $liked;
+
+        return $this;
+    }
+
+    public function getLevel(): ?int
+    {
+        return $this->level;
+    }
+
+    public function setLevel(int $level): self
+    {
+        $this->level = $level;
 
         return $this;
     }

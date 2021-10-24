@@ -5,5 +5,6 @@
 		<h1>Modifier les informations</h1>
 		{{ include('user/_form_team.html.twig', {'button_label': 'Update'}) }}
 		<a href="{{ path('user') }}">Retour à la liste</a>
+		{{ include('user/_delete_form.html.twig') }}
 	</div>
 {% endblock %}

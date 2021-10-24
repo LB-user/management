@@ -8,35 +8,16 @@
 			<tbody>
 				<tr>
 					<th>Nom</th>
-					<td>{{ user.firstname }}
-						{{ user.lastname }}</td>
+					<td>{{ user_skill.getSkillId().getName() }}</td>
 				</tr>
                 <tr>
-					<th>Email</th>
-					<td>{{ user.email }}</td>
+					<th>Niveau</th>
+					<td>{{ user_skill.level }}</td>
 				</tr>
                 <tr>
-					<th>Numéro de téléphone</th>
-					<td>{{ user.phone }}</td>
+					<th>Appréciation</th>
+					<td>{{ user_skill.liked }}</td>
 				</tr>
-                <tr>
-					<th>Compétences</th>
-					<td><a class="btn btn-primary" href="{{ path("user_skill_edit", {"id": user.id}) }}">Voir les compétences</a></td>
-				</tr>
-                <tr>
-					<th>Expérience</th>
-					<td><a class="btn btn-primary" href="#">Voir les expériences</a></td>
-				</tr>
-                <tr>
-					<th>Documents</th>
-					<td><a class="btn btn-primary" href="#">Voir les documents</a></td>
-				</tr>
-                {% if (user.parent != NULL) or (app.user.id == user.id) %}
-                <tr>
-					<th>Entreprise</th>
-					<td><a class="btn btn-primary" href="#">Voir l'entreprise</a></td>
-				</tr>
-                {% endif %}
 			</tbody>
 		</table>
 		<a href="{{ path('user') }}">Retour à la liste</a>

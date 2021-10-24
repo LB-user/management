@@ -17,22 +17,21 @@
 							<div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
 								<div class="accordion-body">
 									<div class="row row-cols-1 row-cols-md-4 g-4">
-									{% for userskill in user.userSkills %}
-										<div class="card" style="width: 18rem;">
-											<div class="card-body">
-												<h5 class="card-title">{{userskill.getSkillId().getName()}}</h5>
-												<h6 class="card-subtitle mb-2 text-muted">{{userskill.getSkillId().getLevel()}}</h6>
-												{% if userskill.getSkillId().getLiked() %}
-															<p class="card-text">Aime</p>
-														{% else %}
-															<p class="card-text">N'aime pas</p>
-														{% endif %}
-												<a href="{{ path("skill_edit", {"id": userskill.getSkillId().getId()}) }}" class="card-link">Modifier</a>
-												<a href="{{ path("skill_delete", {"id": userskill.getSkillId().getId()}) }}" class="card-link">Supprimer</a>
+										{% for userskill in user.userSkills %}
+											<div class="card" style="width: 18rem;">
+												<div class="card-body">
+													<h5 class="card-title">{{userskill.getSkillId().getName()}}</h5>
+													<h6 class="card-subtitle mb-2 text-muted">{{userskill.getLevel()}}</h6>
+													{% if userskill.getLiked() %}
+														<p class="card-text">Aime</p>
+													{% else %}
+														<p class="card-text">N'aime pas</p>
+													{% endif %}
+													<a href="{{ path("user_skill_edit", {"id": userskill.getId()}) }}" class="card-link">Modifier</a>
+												</div>
 											</div>
-										</div>
-									{% endfor %}
-									<a href="{{ path("skill_new") }}" class="card-link">Ajouter une compétence</a>
+										{% endfor %}
+										<a href="{{ path("user_skill_new") }}" class="card-link">Ajouter une compétence</a>
 									</div>
 								</div>
 							</div>
@@ -86,4 +85,6 @@
 		</tr>
 	</tbody>
 </table>
+<a class="btn btn-primary" href="{{ path('user_edit', {"id": user.id}) }}">Modifier les informations du profil</a>
+{{ include('user/_delete_form.html.twig') }}
 <a href="{{ path('user') }}">Retour à la liste</a></div>{% endblock %}

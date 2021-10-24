@@ -38,11 +38,46 @@
 							{% endif %}
 
 							<a class="btn btn-secondary" href="{{ path("user_show", {"id": app.user.id}) }}">Plus d'informations</a>
-							<a class="btn btn-danger" href="{{ path('user_delete', {'id': app.user.id}) }}">Supprimer</a>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-{% endblock %}
+	<div class="container">
+		<div class="overflow-auto">
+			<h1>Gestion des assignations de compétences</h1>
+
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">Nom de la personne</th>
+						<th scope="col">Nom de la compétence</th>
+						<th scope="col">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					{% for userSkill in user_skills %}
+
+						<tr class="table-active">
+							<th scope="row">{{ userSkill.id }}</th>
+							<td>{{userSkill.getUserId().getFirstName()}}
+								{{userSkill.getUserId().getLastName()}}</td>
+							<td>{{ userSkill.getSkillId().getName() }}</td>
+							<td>
+								<a class="btn btn-secondary" href="{{ path("user_skill_show", {"id": userSkill.getId()}) }}">Plus d'informations</a>
+								<a class="btn btn-primary" href="{{ path("user_skill_edit", {"id": userSkill.getId()}) }}">Modifier</a>
+							</td>
+						</tr>
+
+					{% endfor %}
+				</tbody>
+			</tbody>
+		</table>
+		{% if is_granted("ROLE_ADMIN") %}
+			<a class="btn btn-primary" href="{{ path("user_skill_new") }}">Ajouter</i>
+		</a>
+	{% endif %}
+</div></div>{% endblock %}

@@ -20,16 +20,7 @@ class SkillType extends AbstractType
                     'class' => 'w-50 form-control'
                 ],
             ])
-            ->add('level', TextType::class, [
-                'attr' => [
-                    'class' => 'w-50 form-control'
-                ],
-            ])->add('liked', ChoiceType::class, array(
-                'choices'  => array(
-                    'Aime' => 1,
-                    'N\'aime pas' => 0
-                )
-            ))
+            
             ->add('register', SubmitType::class, [
                 'attr' => [
                     'class' => 'mt-2 btn-danger'

@@ -4,11 +4,51 @@
 {% endblock %}
 
 {% block body %}
+	<div class="card text-center">
+		<div class="card-body overflow-auto">
+			<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
+				<div class="container d-flex justify-content-center w-100">
+					<div class="card w-100">
+						<div class="card-body">
+							<h5 class="card-title">{{ app.user.firstname }}
+								{{ app.user.lastname }}</h5>
+							<p class="card-text">
+								Vous êtes connecté en tant que :
+								{% if is_granted("ROLE_SUPER_ADMIN") %}
+									Administrateur
+								{% elseif is_granted("ROLE_ADMIN") %}
+									Commercial
+								{% elseif (is_granted("ROLE_USER")) and app.user.parent %}
+									Collaborateur
+								{% else %}
+									Candidat
+								{% endif %}
+							</p>
+						</div>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">{{ app.user.email }}</li>
+							<li class="list-group-item">{{ app.user.address }}</li>
+							<li class="list-group-item">{{ app.user.phone }}</li>
+						</ul>
+						<div class="card-body">
+							{% if is_granted("ROLE_SUPER_ADMIN") %}
+								<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": app.user.id}) }}">Modifier</a>
+							{% else %}
+								<a class="btn btn-primary" href="{{ path("user_edit", {"id": app.user.id}) }}">Modifier</a>
+							{% endif %}
+
+							<a class="btn btn-secondary" href="{{ path("user_show", {"id": app.user.id}) }}">Plus d'informations</a>
+							<a class="btn btn-danger" href="{{ path('user_delete', {'id': app.user.id}) }}">Supprimer</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="container">
 		<div class="overflow-auto">
-			<h1>Gestion du personnel</h1>
+			<h1>Gestion des Compétences</h1>
 
-			<h2>Gestion</h2>
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -25,12 +65,8 @@
 							<th scope="row">{{ skill.id }}</th>
 							<td>{{ skill.name }}</td>
 							<td>
-								<a class="btn btn-info" href="{{ path("skill_show", {"id": skill.id}) }}">
-									<i class="fas fa-eye"></i>
-								</a>
-									<a class="btn btn-secondary" href="{{ path("skill_edit", {"id": skill.id}) }}">
-										<i class="fas fa-pen"></i>
-									</a>
+								<a class="btn btn-secondary" href="{{ path("skill_show", {"id": skill.id}) }}">Plus d'informations</a>
+									<a class="btn btn-primary" href="{{ path("skill_edit", {"id": skill.id}) }}">Modifier</a>
 							</td>
 						</tr>
 

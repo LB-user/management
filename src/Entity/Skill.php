@@ -25,19 +25,9 @@ class Skill
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $level;
-
-    /**
      * @ORM\OneToMany(targetEntity=UserSkill::class, mappedBy="skill_id")
      */
     private $userSkills;
-
-    /**
-     * @ORM\Column(type="smallint")
-     */
-    private $Liked;
 
     public function __construct()
     {
@@ -57,18 +47,6 @@ class Skill
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getLevel(): ?string
-    {
-        return $this->level;
-    }
-
-    public function setLevel(string $level): self
-    {
-        $this->level = $level;
 
         return $this;
     }
@@ -99,18 +77,6 @@ class Skill
                 $userSkill->setSkillId(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getLiked(): ?int
-    {
-        return $this->Liked;
-    }
-
-    public function setLiked(int $Liked): self
-    {
-        $this->Liked = $Liked;
 
         return $this;
     }

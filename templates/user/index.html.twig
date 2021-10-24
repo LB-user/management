@@ -38,7 +38,6 @@
 							{% endif %}
 
 							<a class="btn btn-secondary" href="{{ path("user_show", {"id": app.user.id}) }}">Plus d'informations</a>
-							<a class="btn btn-danger" href="{{ path('user_delete', {'id': app.user.id}) }}">Supprimer</a>
 						</div>
 					</div>
 				</div>
@@ -51,13 +50,12 @@
 									<h5 class="card-title">{{ user.firstname }}
 										{{ user.lastname }}</h5>
 									<p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-									<a class="btn btn-info" href="{{ path("user_show", {"id": user.id}) }}">
-										Details
+									<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">
+										Plus d'informations
 									</a>
-									<a class="btn btn-secondary" href="{{ path("user_edit_admin", {"id": user.id}) }}">
+									<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">
 										Modifier
 									</a>
-									<a class="btn btn-danger" href="{{ path('user_delete', {'id': user.id}) }}">Supprimer</a>
 								</div>
 							</div>
 						</div>
@@ -73,7 +71,7 @@
 										<p class="card-body">
 											<div class="container">
 												{% for userskill in child.userSkills %}
-													{% if userskill.getSkillId().getLiked() %}
+													{% if userskill.getLiked() %}
 														<span class="badge bg-primary">{{userskill.getSkillId().getName()}}</span>
 													{% else %}
 														<span class="badge bg-danger">{{userskill.getSkillId().getName()}}</span>
@@ -83,9 +81,8 @@
 											<div class="card-body">
 												<h5 class="card-title">{{ child.firstname }}
 													{{ child.lastname }}</h5>
-												<a class="btn btn-info" href="{{ path("user_show", {"id": child.id}) }}">Details</a>
-												<a class="btn btn-secondary" href="{{ path("user_edit_team", {"id": child.id}) }}">Modifier</a>
-												<a class="btn btn-danger" href="{{ path('user_delete', {'id': child.id}) }}">Supprimer</a>
+												<a class="btn btn-secondary" href="{{ path("user_show", {"id": child.id}) }}">Plus d'informations</a>
+												<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": child.id}) }}">Modifier</a>
 											</p>
 										</p>
 									</div>
@@ -109,10 +106,8 @@
 								<div class="card-body">
 									<h5 class="card-title">{{ user.firstname }}
 										{{ user.lastname }}</h5>
-									<p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-									<a class="btn btn-info" href="{{ path("user_show", {"id": user.id}) }}">Details</a>
-									<a class="btn btn-secondary" href="{{ path("user_edit_team", {"id": user.id}) }}">Modifier</a>
-									<a class="btn btn-danger" href="{{ path('user_delete', {'id': user.id}) }}">Supprimer</a>
+									<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations'</a>
+									<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": user.id}) }}">Modifier</a>
 								</div>
 							</div>
 						</div>

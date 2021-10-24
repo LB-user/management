@@ -151,7 +151,7 @@ class UserController extends AbstractController
     public function delete(Request $request, User $user): Response
     {
         $actualUser = $this->getUser();
-        if(($actualUser->getId() == $user->getId() || in_array('ROLE_SUPER_ADMIN', $actualUser->getRoles(), true)))
+        if(($actualUser->getId() == $user->getId() || in_array('ROLE_ADMIN', $actualUser->getRoles(), true)))
         {
             if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->getDoctrine()->getManager();

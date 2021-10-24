@@ -13,7 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class UserSkillController extends AbstractController
 {
     /**
-     * @Route("/userskill", name="user_skill")
+     * @Route("/user/skill", name="user_skill")
      */
     public function index(UserSkillRepository $userSkillRepository): Response
     {
@@ -23,12 +23,10 @@ class UserSkillController extends AbstractController
     }
 
     /**
-     * @Route("/userskill/new", name="user_skill_new", methods={"GET","POST"})
+     * @Route("/user/skill/new", name="user_skill_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
     {
-        $userSkill = $this->getUserSkill();
-
             $userSkill = new UserSkill();
             $form = $this->createForm(UserSkillType::class, $userSkill);
             $form->handleRequest($request);
@@ -48,9 +46,9 @@ class UserSkillController extends AbstractController
     }
 
     /**
-     * @Route("/userskill/{id}", name="user_skill_show", methods={"GET"})
+     * @Route("/user/skill/{id}", name="user_skill_show", methods={"GET"})
      */
-    public function show(userSkill $userSkill): Response
+    public function show(UserSkill $userSkill): Response
     {
         return $this->render('user_skill/show.html.twig', [
             'user_skill' => $userSkill,
@@ -58,49 +56,36 @@ class UserSkillController extends AbstractController
     }
 
     /**
-     * @Route("/userskill/edit/{id}", name="user_skill_edit", methods={"GET","POST"})
+     * @Route("/user/skill/edit/{id}", name="user_skill_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, UserSkill $userSkill): Response
     {
-        $actualUserSkill = $this->getUserSkill();
-        if($actualUserSkill->getId() == $userSkill->getId() || in_array('ROLE_SUPER_ADMIN', $actualUserSkill->getRoles(), true))
-        {
             $form = $this->createForm(UserSkillType::class, $userSkill);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
 
-                return $this->redirectToRoute('user_skill', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
             }
 
             return $this->renderForm('user_skill/edit.html.twig', [
                 'user_skill' => $userSkill,
                 'form' => $form,
             ]);
-        }
-        else {
-            return $this->redirectToRoute('user');
-        }
     }
 
     /**
-     * @Route("/userskill/{id}", name="user_skill_delete", methods={"POST"})
+     * @Route("/user/skill/{id}", name="user_skill_delete", methods={"POST"})
      */
     public function delete(Request $request, UserSkill $userSkill): Response
     {
-        $actualUserSkill = $this->getUserSkill();
-        if(($actualUserSkill->getId() == $userSkill->getId() || in_array('ROLE_SUPER_ADMIN', $actualUserSkill->getRoles(), true)))
-        {
             if ($this->isCsrfTokenValid('delete'.$userSkill->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->remove($userSkill);
                 $entityManager->flush();
             }
-            return $this->redirectToRoute('user_skill', [], Response::HTTP_SEE_OTHER);
-        }
-        else {
-            return $this->redirectToRoute('user');
-        }
+            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+        
     }
 }

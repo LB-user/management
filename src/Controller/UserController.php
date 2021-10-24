@@ -96,25 +96,19 @@ class UserController extends AbstractController
      */
     public function editTeam(Request $request, User $user): Response
     {
-        $actualUser = $this->getUser();
-        if($actualUser->getId() != $user->getId())
-        {
-            $form = $this->createForm(UserHierarchyType::class, $user);
-            $form->handleRequest($request);
+        
+        $form = $this->createForm(UserHierarchyType::class, $user);
+        $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
 
-                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
-            }
-            return $this->renderForm('user/edit_team.html.twig', [
-                'user' => $user,
-                'form' => $form,
-            ]);
+            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
         }
-        else {
-            return $this->redirectToRoute('user');
-        }
+        return $this->renderForm('user/edit_team.html.twig', [
+            'user' => $user,
+            'form' => $form,
+        ]);
     }
 
     /**
@@ -123,25 +117,18 @@ class UserController extends AbstractController
      */
     public function editAdmin(Request $request, User $user): Response
     {
-        $actualUser = $this->getUser();
-        if($actualUser->getId() == $user->getId())
-        {
-            $form = $this->createForm(UserAdminType::class, $user);
-            $form->handleRequest($request);
+        $form = $this->createForm(UserAdminType::class, $user);
+        $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
 
-                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
-            }
-            return $this->renderForm('user/edit_admin.html.twig', [
-                'user' => $user,
-                'form' => $form,
-            ]);
+            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
         }
-        else {
-            return $this->redirectToRoute('user');
-        }
+        return $this->renderForm('user/edit_admin.html.twig', [
+            'user' => $user,
+            'form' => $form,
+        ]);
     }
 
     /**

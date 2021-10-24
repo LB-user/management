@@ -27,7 +27,7 @@ class UserAdminType extends AbstractType
                 'Commerial' => 'ROLE_ADMIN',
                 'Administrateur' => 'ROLE_SUPER_ADMIN'
             ],
-            'expanded' => false,
+            'expanded' => true,
             'multiple' => true,
             'label' => 'Rôles' 
         ])

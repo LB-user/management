@@ -1,0 +1,31 @@
+{{ form_start(form) }}
+
+{% if is_granted("ROLE_ADMIN") %}
+	 {{ form_row(form.roles, {
+        label: 'Attribution du role : '
+     }) }}
+    {{ form_row(form.email, {
+        label: 'Adresse E-mail'
+    }) }}
+    {{ form_row(form.lastname, {
+        label: 'Nom'
+    }) }}
+	{{ form_row(form.firstname, {
+        label: 'Prénom'
+    }) }}
+	{{ form_row(form.address, {
+        label: 'Adresse'
+    }) }}
+    {{ form_row(form.parent, {
+        label: 'Commercial référent'
+    }) }}
+	{{ form_row(form.phone, {
+        label: 'Numéro de téléphone'
+    }) }}
+	{{ form_row(form.register, {
+        label: 'Modifier'
+    }) }}
+{% endif %}
+
+{{ form_end(form) }}
+<form method="post"

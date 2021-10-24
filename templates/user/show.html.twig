@@ -7,40 +7,79 @@
 		<table class="table">
 			<tbody>
 				<tr>
+					<div class="accordion" id="accordionPanelsStayOpenExample">
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="panelsStayOpen-headingOne">
+								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+									Les compétences
+								</button>
+							</h2>
+							<div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+								<div class="accordion-body">
+									<div class="row row-cols-1 row-cols-md-4 g-4">
+									{% for userskill in user.userSkills %}
+										<div class="card" style="width: 18rem;">
+											<div class="card-body">
+												<h5 class="card-title">{{userskill.getSkillId().getName()}}</h5>
+												<h6 class="card-subtitle mb-2 text-muted">{{userskill.getSkillId().getLevel()}}</h6>
+												<p class="card-text"></p>
+												<a href="{{ path("user_skill_edit", {"id": userskill.getSkillId().getId()}) }}" class="card-link">Modifier</a>
+												<a href="{{ path("user_skill_delete", {"id": userskill.getSkillId().getId()}) }}" class="card-link">Supprimer</a>
+											</div>
+										</div>
+									{% endfor %}
+									<a href="{{ path("user_skill_new") }}" class="card-link">Ajouter une compétence</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+									Voir les expériences
+								</button>
+							</h2>
+							<div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+								<div class="accordion-body">
+									<strong>This is the second item's accordion body.</strong>
+									It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the
+									<code>.accordion-body</code>, though the transition does limit overflow.
+								</div>
+							</div>
+						</div>
+						{% if (user.parent != NULL) or (app.user.id == user.id) %}
+							<div class="accordion-item">
+								<h2 class="accordion-header" id="panelsStayOpen-headingThree">
+									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+										Voir l'entreprise
+									</button>
+								</h2>
+								<div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+									<div class="accordion-body">
+										<strong>This is the third item's accordion body.</strong>
+										It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the
+										<code>.accordion-body</code>, though the transition does limit overflow.
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+				</tr>
+				<tr>
 					<th>Nom</th>
 					<td>{{ user.firstname }}
 						{{ user.lastname }}</td>
 				</tr>
-                <tr>
+				<tr>
 					<th>Email</th>
 					<td>{{ user.email }}</td>
 				</tr>
-                <tr>
+				<tr>
 					<th>Numéro de téléphone</th>
 					<td>{{ user.phone }}</td>
 				</tr>
-                <tr>
-					<th>Compétences</th>
-					<td><a class="btn btn-primary" href="#">Voir les compétences</a></td>
-				</tr>
-                <tr>
-					<th>Expérience</th>
-					<td><a class="btn btn-primary" href="#">Voir les expériences</a></td>
-				</tr>
-                <tr>
-					<th>Documents</th>
-					<td><a class="btn btn-primary" href="#">Voir les documents</a></td>
-				</tr>
-                {% if (user.parent != NULL) or (app.user.id == user.id) %}
-                <tr>
-					<th>Entreprise</th>
-					<td><a class="btn btn-primary" href="#">Voir l'entreprise</a></td>
-				</tr>
-                {% endif %}
 			</tbody>
-		</table>
-		<a href="{{ path('user') }}">Retour à la liste</a>
-	</div>
-
-
-{% endblock %}
+		</tr>
+	</tbody>
+</table>
+<a href="{{ path('user') }}">Retour à la liste</a></div>{% endblock %}

@@ -7,7 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UserSkillType extends AbstractType
+class UserSkillType extends SkillType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -15,6 +15,16 @@ class UserSkillType extends AbstractType
             ->add('liked')
             ->add('user_id')
             ->add('skill_id')
+                        ->add('name', TextType::class, [
+                'attr' => [
+                    'class' => 'w-50 form-control'
+                ],
+            ])
+            ->add('register', SubmitType::class, [
+                'attr' => [
+                    'class' => 'mt-2 btn-danger'
+                ]
+            ]);
         ;
     }
 

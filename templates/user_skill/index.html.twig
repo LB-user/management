@@ -1,20 +1,48 @@
-{% extends 'base.html.twig' %}
+{% extends "base.html.twig" %}
 
-{% block title %}Hello UserSkillController!{% endblock %}
+{% block title %}Gestion
+{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+	<div class="card text-center">
+		<div class="card-body overflow-auto">
+			<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
+				<div class="container d-flex justify-content-center w-100">
+					<div class="card w-100">
+						<div class="card-body">
+							<h5 class="card-title">{{ app.user.firstname }}
+								{{ app.user.lastname }}</h5>
+							<p class="card-text">
+								Vous êtes connecté en tant que :
+								{% if is_granted("ROLE_SUPER_ADMIN") %}
+									Administrateur
+								{% elseif is_granted("ROLE_ADMIN") %}
+									Commercial
+								{% elseif (is_granted("ROLE_USER")) and app.user.parent %}
+									Collaborateur
+								{% else %}
+									Candidat
+								{% endif %}
+							</p>
+						</div>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">{{ app.user.email }}</li>
+							<li class="list-group-item">{{ app.user.address }}</li>
+							<li class="list-group-item">{{ app.user.phone }}</li>
+						</ul>
+						<div class="card-body">
+							{% if is_granted("ROLE_SUPER_ADMIN") %}
+								<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": app.user.id}) }}">Modifier</a>
+							{% else %}
+								<a class="btn btn-primary" href="{{ path("user_edit", {"id": app.user.id}) }}">Modifier</a>
+							{% endif %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/Users/LudovicBRAULT/Desktop/dwwm2021-3/ECF/ECF-Symfony/Difficile/management/src/Controller/UserSkillController.php'|file_link(0) }}">src/Controller/UserSkillController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/Users/LudovicBRAULT/Desktop/dwwm2021-3/ECF/ECF-Symfony/Difficile/management/templates/user_skill/index.html.twig'|file_link(0) }}">templates/user_skill/index.html.twig</a></code></li>
-    </ul>
-</div>
+							<a class="btn btn-secondary" href="{{ path("user_show", {"id": app.user.id}) }}">Plus d'informations</a>
+							<a class="btn btn-danger" href="{{ path('user_delete', {'id': app.user.id}) }}">Supprimer</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

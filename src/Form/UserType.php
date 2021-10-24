@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Entity\Skill;
+use App\Form\UserSkillType;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -22,27 +23,27 @@ class UserType extends AbstractType
         $builder
         ->add('lastname', TextType::class, [
             'attr' => [
-                'class' => 'w-50 form-control'
-            ],
+                'class' => 'form-control'
+        ],
         ])
         ->add('firstname', TextType::class, [
             'attr' => [
-                'class' => 'w-50 form-control'
+                'class' => 'form-control'
         ],
         ])
         ->add('address', TextType::class, [
             'attr' => [
-                'class' => 'w-50 form-control'
+                'class' => 'form-control'
         ],
         ])
         ->add('phone', TextType::class, [
             'attr' => [
-                'class' => 'w-50 form-control'
+                'class' => 'form-control'
         ],
         ])
         ->add('register', SubmitType::class, [
             'attr' => [
-                'class' => 'mt-2 btn-danger'
+                'class' => 'mt-1 btn-danger'
             ]
         ]);
     }

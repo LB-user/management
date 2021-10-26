@@ -112,7 +112,7 @@
 								<div class="card-body">
 									<h5 class="card-title">{{ user.firstname }}
 										{{ user.lastname }}</h5>
-									<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations'</a>
+									<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
 									<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": user.id}) }}">Modifier</a>
 								</div>
 							</div>
@@ -125,7 +125,7 @@
 	{% else %}
 {% endif %}
 {% if is_granted("ROLE_ADMIN") %}
-	<a class="btn btn-primary" href="{{ path("user_new") }}">
+	<a class="btn btn-primary" href="{{ path("app_register") }}">
 		Créer un nouveau profil +
 	</a>
 {% endif %}</div></div></div>{% endblock %}

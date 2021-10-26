@@ -17,9 +17,11 @@ class ExperienceType extends AbstractType
             ->add('company')
             ->add('start_at', DateTimeType::class, array(
                 'input' => 'datetime_immutable',
+                'date_widget' =>'single_text',
             ))
             ->add('end_at', DateTimeType::class, array(
                 'input' => 'datetime_immutable',
+                'date_widget' =>'single_text',
             ))
             ->add('details')
             ->add('register', SubmitType::class, [

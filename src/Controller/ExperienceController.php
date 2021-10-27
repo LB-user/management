@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ExperienceController extends AbstractController
 {
+
     /**
      * @Route("/experience", name="experience")
      */
@@ -28,22 +29,22 @@ class ExperienceController extends AbstractController
     public function new(Request $request): Response
     {
 
-            $experience = new Experience();
-            $form = $this->createForm(ExperienceType::class, $experience);
-            $form->handleRequest($request);
+        $experience = new Experience();
+        $form = $this->createForm(ExperienceType::class, $experience);
+        $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($experience);
-                $entityManager->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($experience);
+            $entityManager->flush();
 
-                return $this->redirectToRoute('experience', [], Response::HTTP_SEE_OTHER);
-            }
+            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+        }
 
-            return $this->renderForm('experience/new.html.twig', [
-                'experience' => $experience,
-                'form' => $form,
-            ]);
+        return $this->renderForm('experience/new.html.twig', [
+            'experience' => $experience,
+            'form' => $form,
+        ]);
     }
 
     /**
@@ -62,19 +63,19 @@ class ExperienceController extends AbstractController
     public function edit(Request $request, Experience $experience): Response
     {
 
-            $form = $this->createForm(ExperienceType::class, $experience);
-            $form->handleRequest($request);
+        $form = $this->createForm(ExperienceType::class, $experience);
+        $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
 
-                return $this->redirectToRoute('experience', [], Response::HTTP_SEE_OTHER);
-            }
+            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+        }
 
-            return $this->renderForm('experience/edit.html.twig', [
-                'experience' => $experience,
-                'form' => $form,
-            ]);
+        return $this->renderForm('experience/edit.html.twig', [
+            'experience' => $experience,
+            'form' => $form,
+        ]);
     }
 
     /**
@@ -82,19 +83,12 @@ class ExperienceController extends AbstractController
      */
     public function delete(Request $request, Experience $experience): Response
     {
-        $actualexperience = $this->getexperience();
-        if(($actualexperience->getId() == $experience->getId() || $actualexperience->getRoles() == ['ROLE_SUPER_ADMIN']))
-        {
-            if ($this->isCsrfTokenValid('delete'.$experience->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->remove($experience);
-                $entityManager->flush();
-            }
-    
-            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+        if ($this->isCsrfTokenValid('delete' . $experience->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($experience);
+            $entityManager->flush();
         }
-        else {
-            return $this->redirectToRoute('user');
-        }
+
+        return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
     }
 }

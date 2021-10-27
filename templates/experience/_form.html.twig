@@ -1,17 +1,20 @@
 {{ form_start(form) }}
+        {{ form_row(form.user, {
+                label: 'Nom de la personne'
+        }) }}
         {{ form_row(form.company, {
-        label: 'Nom de l\'entreprise'
+                label: 'Nom de l\'entreprise'
         }) }}
         {{ form_row(form.start_at, {
-        label: 'Date de début'
+                label: 'Date de début'
         }) }}
         {{ form_row(form.end_at, {
-        label: 'Date de fin'
+                label: 'Date de fin'
         }) }}
         {{ form_row(form.details, {
-        label: 'Détails'
+                label: 'Détails'
         }) }}
         {{ form_row(form.register, {
-        label: 'Modifier'
+                label: 'Modifier'
         }) }}
 {{ form_end(form) }}

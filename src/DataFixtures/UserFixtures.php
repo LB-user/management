@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use App\Entity\Experience;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -14,7 +15,7 @@ class UserFixtures extends Fixture
         ['b@gmail.com',['ROLE_USER'],'b','b','b','b','f'],
         ['c@gmail.com',['ROLE_USER'],'c','c','c','c','g'],
         ['d@gmail.com',['ROLE_USER'],'d','d','d','d',NULL],
-        ['e@gmail.com',['ROLE_USER'],'e','e','e','e',NULL],
+        ['e@gmail.com',['ROLE_USER'],'e','e','e','e',NULL]
     ];
 
     public const FAKE_ADMIN = [

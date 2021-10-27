@@ -37,7 +37,7 @@ class SkillController extends AbstractController
                 $entityManager->persist($skill);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('skill', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
             }
 
             return $this->renderForm('skill/new.html.twig', [
@@ -68,7 +68,7 @@ class SkillController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
 
-                return $this->redirectToRoute('skill', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
             }
 
             return $this->renderForm('skill/edit.html.twig', [
@@ -82,9 +82,6 @@ class SkillController extends AbstractController
      */
     public function delete(Request $request, Skill $skill): Response
     {
-        $actualskill = $this->getSkill();
-        if(($actualskill->getId() == $skill->getId() || $actualskill->getRoles() == ['ROLE_SUPER_ADMIN']))
-        {
             if ($this->isCsrfTokenValid('delete'.$skill->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->remove($skill);
@@ -92,9 +89,6 @@ class SkillController extends AbstractController
             }
     
             return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
-        }
-        else {
-            return $this->redirectToRoute('user');
-        }
+
     }
 }

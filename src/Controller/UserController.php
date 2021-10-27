@@ -42,7 +42,7 @@ class UserController extends AbstractController
                 $entityManager->persist($user);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('user_skill', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
             }
 
             return $this->renderForm('user/new.html.twig', [
@@ -77,7 +77,7 @@ class UserController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
 
-                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('user_show', [], Response::HTTP_SEE_OTHER);
             }
 
             return $this->renderForm('user/edit.html.twig', [
@@ -103,7 +103,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('user_show', [], Response::HTTP_SEE_OTHER);
         }
         return $this->renderForm('user/edit_team.html.twig', [
             'user' => $user,
@@ -123,7 +123,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('user_show', [], Response::HTTP_SEE_OTHER);
         }
         return $this->renderForm('user/edit_admin.html.twig', [
             'user' => $user,

@@ -4,7 +4,53 @@
 
 	<div class="container">
 		<h1>Utilisateur</h1>
+		{% if is_granted("ROLE_ADMIN") %}
+		<a class="btn btn-primary" href="{{ path('user_cv', {"id": user.id}) }}">Telecharger le CV
+		</a>
+		{% endif %}
 		<table class="table">
+			<tbody>
+				<tr>
+					<th>Nom</th>
+					<td>{{ user.firstname }}
+						{{ user.lastname }}</td>
+				</tr>
+				<tr>
+					<th>Status</th>
+					<td>
+						{% if 'ROLE_SUPER_ADMIN' in user.roles %}
+							Administrateur
+						{% elseif "ROLE_ADMIN" in user.roles %}
+							Commercial
+						{% elseif "ROLE_USER" in user.roles and user.parent %}
+							Collaborateur
+						{% else %}
+							Candidat
+						{% endif %}
+					</td>
+				</tr>
+				{% if user.parent %}
+					<tr>
+						<th>Commercial en charge</th>
+						<td>{{ user.getParent().getLastName() }}
+							{{ user.getParent().getFirstName() }}</td>
+					</tr>
+				{% endif %}
+				<tr>
+					<th>Email</th>
+					<td>{{ user.email }}</td>
+				</tr>
+				<tr>
+					<th>Numéro de téléphone</th>
+					<td>{{ user.phone }}</td>
+				</tr>
+				<tr>
+					<th>Adresse</th>
+					<td>{{ user.address }}</td>
+				</tr>
+				</tbody>
+				</table>
+				<table class="table">
 			<tbody>
 				<tr>
 					<div class="accordion" id="accordionPanelsStayOpenExample">
@@ -77,44 +123,6 @@
 							</div>
 						</div>
 					{% endif %}
-				</tr>
-				<tr>
-					<th>Nom</th>
-					<td>{{ user.firstname }}
-						{{ user.lastname }}</td>
-				</tr>
-				<tr>
-					<th>Status</th>
-					<td>
-						{% if 'ROLE_SUPER_ADMIN' in user.roles %}
-							Administrateur
-						{% elseif "ROLE_ADMIN" in user.roles %}
-							Commercial
-						{% elseif "ROLE_USER" in user.roles and user.parent %}
-							Collaborateur
-						{% else %}
-							Candidat
-						{% endif %}
-					</td>
-				</tr>
-				{% if user.parent %}
-					<tr>
-						<th>Commercial en charge</th>
-						<td>{{ user.getParent().getLastName() }}
-							{{ user.getParent().getFirstName() }}</td>
-					</tr>
-				{% endif %}
-				<tr>
-					<th>Email</th>
-					<td>{{ user.email }}</td>
-				</tr>
-				<tr>
-					<th>Numéro de téléphone</th>
-					<td>{{ user.phone }}</td>
-				</tr>
-				<tr>
-					<th>Adresse</th>
-					<td>{{ user.address }}</td>
 				</tr>
 			</tbody>
 		</tr>

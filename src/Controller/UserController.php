@@ -10,11 +10,13 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Knp\Snappy\Pdf;
 
 class UserController extends AbstractController
 {
@@ -58,7 +60,7 @@ class UserController extends AbstractController
      * @Route("/{id}", name="user_show", methods={"GET"})
      * @IsGranted("ROLE_USER")
      */
-    public function show(user $user): Response
+    public function show(User $user): Response
     {
         return $this->render('user/show.html.twig', [
             'user' => $user,
@@ -153,6 +155,28 @@ class UserController extends AbstractController
         else {
             return $this->redirectToRoute('user');
         }
+    }
+
+    /**
+     * @Route("/{id}/cv", name="user_cv", methods={"GET"})
+     * @IsGranted("ROLE_ADMIN")
+     */
+    public function pdfAction(Pdf $knpSnappyPdf, User $user)
+    {
+        $date = date('Y_m_d');
+        $lastname = $user->getLastName();
+        $firstname = $user->getFirstName();
+        $filename = $date . '_' . $lastname . '_' . $firstname . '_CV';
+
+        $html = $this->renderView('user/cv.html.twig', array(
+            'title'  => 'Cv',
+            'user' => $user,
+        ));
+
+        return new PdfResponse(
+            $knpSnappyPdf->getOutputFromHtml($html),
+            $filename
+        );
     }
 
     public function searchBar()

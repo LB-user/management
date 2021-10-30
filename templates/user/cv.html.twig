@@ -1,0 +1,66 @@
+<header>
+	<div>
+		<div>
+			<h1>{{ user.firstname }}
+				{{ user.lastname }}</h1>
+		</div>
+		<div>
+			<ul style="list-style-type: none">
+				<li>
+					<strong>Tel:
+						{{ user.phone }}</strong>
+				</li>
+				<li>
+					<strong>E-mail:
+						{{ user.email }}</strong>
+				</li>
+				<li>
+					<strong>Adresse:
+						{{ user.address }}</strong>
+				</li>
+			</ul>
+		</div>
+	</div>
+</header>
+<section class="container">
+	<h3>EXPÉRIENCES</h3>
+	<ul style="list-style-type: none">
+		{% for userexperience in user.getExperienceId() %}
+			<li class="list-group-item">
+				<h5>{{userexperience.company}}
+					{{ userexperience.startAt|date('d/m/Y') }}-{{ userexperience.endAt|date('d/m/Y') }}
+				</h5>
+				<p>
+					{{userexperience.details}}
+				</p>
+			</li>
+		{% endfor %}
+	</ul>
+	<section class="autresComp">
+		<header class="enTete">
+			<div class="txtEnTete">
+				<div class="plTitre3">
+					<h3>COMPÉTENCES</h3>
+				</div>
+			</div>
+		</header>
+		<article class="infosAutresComp">
+			<div class="prgsInformatiques">
+				<ul style="list-style-type: none;">
+					{% for userskill in user.userSkills %}
+						<li>
+							<h4>{{userskill.getSkillId().getName()}}</h4>
+							<p>Niveau :
+								{{userskill.getLevel()}}</p>
+							{% if userskill.getLiked() %}
+								<p class="card-text">Aime</p>
+							{% else %}
+								<p class="card-text">N'aime pas</p>
+							{% endif %}
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</article>
+	</section>
+</section></body></html>

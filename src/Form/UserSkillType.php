@@ -58,7 +58,6 @@ class UserSkillType extends SkillType
                     'Très bon' => 4,
                     'Expert' => 5,
                 )
-                ,
             ])
             ->add('register', SubmitType::class, [
                 'attr' => [

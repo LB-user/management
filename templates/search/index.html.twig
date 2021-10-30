@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SearchController!{% endblock %}
+
+{% block body %}
+{% if app.request.method == 'POST' %}
+    <div>
+        {% if users | length == 0 %}
+            <h4>Aucun résulat pour votre recherche.</h4>
+           {% else %}
+               <h3 class="mt-3">Vos résulats de recherche :</h3>
+               {% for user in users %}
+                   <div class="card w-100">
+						<div class="card-body">
+							<h5 class="card-title">{{ user.firstname }}
+								{{ user.lastname }}</h5>
+							<p class="card-text">
+								Vous êtes connecté en tant que :
+								{% if is_granted("ROLE_SUPER_ADMIN") %}
+									Administrateur
+								{% elseif is_granted("ROLE_ADMIN") %}
+									Commercial
+								{% elseif (is_granted("ROLE_USER")) and user.parent %}
+									Collaborateur
+								{% else %}
+									Candidat
+								{% endif %}
+							</p>
+						</div>
+						<ul class="list-group list-group-flush">
+							<li class="list-group-item">{{ user.email }}</li>
+							<li class="list-group-item">{{ user.address }}</li>
+							<li class="list-group-item">{{ user.phone }}</li>
+						</ul>
+						<div class="card-body">
+							{% if is_granted("ROLE_SUPER_ADMIN") %}
+								<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>
+							{% else %}
+								<a class="btn btn-primary" href="{{ path("user_edit", {"id": user.id}) }}">Modifier</a>
+							{% endif %}
+
+							<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
+						</div>
+					</div>
+				</div>
+              {% endfor %}
+          {% endif %}
+     </div>
+{% endif %}
+{% endblock %}

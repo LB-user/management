@@ -10,6 +10,9 @@ use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
@@ -150,5 +153,36 @@ class UserController extends AbstractController
         else {
             return $this->redirectToRoute('user');
         }
+    }
+
+    public function searchBar()
+    {
+        $form = $this->createFormBuilder(null)
+        ->add('choice', ChoiceType::class, [
+            'label' => 'Rechercher par :',
+            'attr' => [
+                'class' => 'w-50 form-control'
+            ],
+            'choices'  => array(
+                'nom' => 'user.lastname',
+                'compétences' => 'skill',
+                'appétences' => 'appetence',
+            )
+        ])
+        ->add('query', TextType::class, [
+            'label' => 'Rechercher',
+            'attr' => [
+                'class' => 'w-50 form-control'
+            ],
+        ])
+        ->add('submit', SubmitType::class, [
+            'attr' => [
+                'class' => 'mt-2 btn-danger'
+            ]
+        ])
+        ->getForm();
+        return $this->render('user/search_bar.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 }

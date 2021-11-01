@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Entity\Company;
 use App\Entity\Experience;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
@@ -27,7 +28,16 @@ class ExperienceType extends AbstractType
                         ->orderBy('u.lastname', 'ASC');
                     }
             ])
-            ->add('company')
+            ->add('company', EntityType::class, [
+                'class' => Company::class,
+                'expanded' => false,
+                'multiple' => false,
+                'choice_label' => 'name',
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('u')                 
+                    ->orderBy('u.name', 'ASC');
+                }
+        ])
             ->add('start_at', DateTimeType::class, array(
                 'input' => 'datetime_immutable',
                 'date_widget' =>'single_text',

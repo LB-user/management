@@ -1,0 +1,14 @@
+{{ form_start(form) }}
+        {{ form_row(form.name, {
+                label: 'Nom de l\'Entreprise'
+        }) }}
+        {{ form_row(form.address, {
+                label: 'Adresse de l\'entreprise'
+        }) }}
+        {{ form_row(form.contact, {
+                label: 'Numéro de contact de l\'entreprise'
+        }) }}
+        {{ form_row(form.register, {
+                label: 'Modifier'
+        }) }}
+{{ form_end(form) }}

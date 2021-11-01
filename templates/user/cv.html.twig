@@ -27,7 +27,7 @@
 	<ul style="list-style-type: none">
 		{% for userexperience in user.getExperienceId() %}
 			<li class="list-group-item">
-				<h5>{{userexperience.company}}
+				<h5>{{userexperience.getCompany().getName()}}</h5>
 					{{ userexperience.startAt|date('d/m/Y') }}-{{ userexperience.endAt|date('d/m/Y') }}
 				</h5>
 				<p>

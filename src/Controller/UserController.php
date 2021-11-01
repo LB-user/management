@@ -159,7 +159,6 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{id}/cv", name="user_cv", methods={"GET"})
-     * @IsGranted("ROLE_ADMIN")
      */
     public function pdfAction(Pdf $knpSnappyPdf, User $user)
     {

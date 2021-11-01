@@ -18,17 +18,12 @@ class Experience
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $company;
-
-    /**
      * @ORM\Column(type="datetime_immutable")
      */
     private $start_at;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
+     * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private $end_at;
 
@@ -42,23 +37,21 @@ class Experience
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Company::class, inversedBy="experience")
+     */
+    private $company;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $job;
+
     public function getId(): ?int
     {
         return $this->id;
     }
-
-    public function getCompany(): ?string
-    {
-        return $this->company;
-    }
-
-    public function setCompany(string $company): self
-    {
-        $this->company = $company;
-
-        return $this;
-    }
-
+    
     public function getStartAt(): ?\DateTimeImmutable
     {
         return $this->start_at;
@@ -103,6 +96,30 @@ class Experience
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCompany(): ?Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): self
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    public function getJob(): ?string
+    {
+        return $this->job;
+    }
+
+    public function setJob(?string $job): self
+    {
+        $this->job = $job;
 
         return $this;
     }

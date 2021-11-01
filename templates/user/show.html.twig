@@ -4,10 +4,8 @@
 
 	<div class="container">
 		<h1>Utilisateur</h1>
-		{% if is_granted("ROLE_ADMIN") %}
-		<a class="btn btn-primary" href="{{ path('user_cv', {"id": user.id}) }}">Telecharger le CV
-		</a>
-		{% endif %}
+			<a class="btn btn-primary" href="{{ path('user_cv', {"id": user.id}) }}">Telecharger le CV
+			</a>
 		<table class="table">
 			<tbody>
 				<tr>
@@ -48,9 +46,9 @@
 					<th>Adresse</th>
 					<td>{{ user.address }}</td>
 				</tr>
-				</tbody>
-				</table>
-				<table class="table">
+			</tbody>
+		</table>
+		<table class="table">
 			<tbody>
 				<tr>
 					<div class="accordion" id="accordionPanelsStayOpenExample">
@@ -94,9 +92,9 @@
 										{% for userexperience in user.getExperienceId() %}
 											<div class="card">
 												<div class="card-body">
-													<h5 class="card-title">{{userexperience.company}}</h5>
-													<h6 class="card-subtitle mb-2 text-muted">{{ userexperience.startAt|date('d/m/Y') }}-{{ userexperience.endAt|date('d/m/Y') }}</h6>
-													<p>{{userexperience.details}}</p>
+													<h5 class="card-title">{{userexperience.getCompany().getName() }}</h5>
+													<h6 class="card-subtitle mb-2 text-muted">{{ userexperience.job }}<br/>{{ userexperience.startAt|date('d/m/Y') }}-{{ userexperience.endAt|date('d/m/Y') }}</h6>
+													<p>{{userexperience.details|length > 50 ? userexperience.details|slice(0, 50) ~ '[...]' : userexperience.details}}</p>
 													<a href="{{ path("experience_edit", {"id": userexperience.id}) }}" class="card-link">Modifier</a>
 												</div>
 											</div>
@@ -115,9 +113,19 @@
 								</h2>
 								<div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
 									<div class="accordion-body">
-										<strong>This is the third item's accordion body.</strong>
-										It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the
-										<code>.accordion-body</code>, though the transition does limit overflow.
+										{% for usercompany in user.getExperienceId() %}
+											{% if usercompany.endAt|date('dmY') == date()|date('dmY') %}
+												<div class="card text-center">
+													<div class="card-header">
+														{{ usercompany.getCompany().getName() }}
+													</div>
+													<div class="card-body">
+														<p class="card-text">{{ usercompany.getCompany().getAddress() }}</p>
+														<p class="card-text">{{ usercompany.getCompany().getContact() }}</p>
+													</div>
+												</div>
+											{% endif %}
+										{% endfor %}
 									</div>
 								</div>
 							</div>

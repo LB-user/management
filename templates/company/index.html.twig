@@ -47,32 +47,30 @@
 	</div>
 	<div class="container">
 		<div class="overflow-auto">
-			<h1>Gestion des Experiences</h1>
+			<h1>Gestion des Entreprises</h1>
 
 			<table class="table table-hover">
 				<thead>
 					<tr>
 						<th scope="col">Id</th>
-						<th scope="col">Nom de la personne</th>
-						<th scope="col">Entreprise</th>
-						<th scope="col">Date de début</th>
-						<th scope="col">Date de fin</th>
+						<th scope="col">Nom de l'Entreprise</th>
+						<th scope="col">Adresse de l'Entreprise</th>
+						<th scope="col">Numéro de contact de l'Entreprise</th>
 						<th scope="col">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
 
-					{% for experience in experiences %}
+					{% for company in companies %}
 
 						<tr class="table-active">
-							<th scope="row">{{ experience.id }}</th>
-							<td>{{ experience.getUser().getLastname() }} {{ experience.getUser().getFirstname() }}</td>
-							<td>{{ experience.getCompany().getName() }}</td>
-							<td>{{ experience.startAt|date('d/m/Y') }}</td>
-							<td>{{ experience.endAt|date('d/m/Y') }}</td>
+							<th scope="row">{{ company.id }}</th>
+							<td>{{ company.name }}</td>
+							<td>{{ company.address }}</td>
+							<td>{{ company.contact }}</td>
 							<td>
-								<a class="btn btn-secondary" href="{{ path("experience_show", {"id": experience.id}) }}">Plus d'informations</a>
-									<a class="btn btn-primary" href="{{ path("experience_edit", {"id": experience.id}) }}">Modifier</a>
+								<a class="btn btn-secondary" href="{{ path("company_show", {"id": company.id}) }}">Plus d'informations</a>
+									<a class="btn btn-primary" href="{{ path("company_edit", {"id": company.id}) }}">Modifier</a>
 							</td>
 						</tr>
 
@@ -81,7 +79,7 @@
 			</tbody>
 		</table>
 	{% if is_granted("ROLE_ADMIN") %}
-		<a class="btn btn-primary" href="{{ path("experience_new") }}">
+		<a class="btn btn-primary" href="{{ path("company_new") }}">
 			<i class="fas fa-plus"></i>
 		</a>
 	{% endif %}

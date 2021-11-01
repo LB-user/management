@@ -7,8 +7,13 @@
 		<table class="table">
 			<tbody>
 				<tr>
+					<th>Nom de la Personne</th>
+					<td>{{ experience.getUser().getLastname() }}
+						{{ experience.getUser().getFirstname() }}</td>
+				</tr>
+				<tr>
 					<th>Nom de la Entreprise</th>
-					<td>{{ experience.company }}</td>
+					<td>{{ experience.getCompany().getName() }}</td>
 				</tr>
 				<tr>
 					<th>Date de début</th>

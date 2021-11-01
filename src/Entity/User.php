@@ -80,6 +80,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $experience_id;
 
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $visibility;
+
     public function __construct()
     {
         $this->childrens = new ArrayCollection();
@@ -321,6 +326,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $experienceId->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getvisibility(): ?int
+    {
+        return $this->visibility;
+    }
+
+    public function setvisibility(int $visibility): self
+    {
+        $this->visibility = $visibility;
 
         return $this;
     }

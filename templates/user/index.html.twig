@@ -1,9 +1,7 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Gestion
-{% endblock %}
-
 {% block body %}
+{{ render (controller('App\\Controller\\SearchController::searchBar'))}}
 	{{ include('user/partials/_infos_user.html.twig') }}
 	{% if is_granted("ROLE_ADMIN") or is_granted("ROLE_SUPER_ADMIN")%}
 		<a class="btn btn-primary" href="{{ path("app_register") }}">Créer un nouveau profil +</a>
@@ -44,6 +42,11 @@
 												<div class="card-body">
 													<h5 class="card-title">{{ user.firstname }}
 														{{ user.lastname }}</h5>
+													{% for usercompany in user.getExperienceId() %}
+														{% if usercompany.endAt|date('dmY') == date()|date('dmY') %}
+															<p>Indisponible</p>
+														{% endif %}
+													{% endfor %}
 													<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
 													{% if is_granted("ROLE_SUPER_ADMIN") %}
 														<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>
@@ -83,6 +86,11 @@
 												<div class="card-body">
 													<h5 class="card-title">{{ user.firstname }}
 														{{ user.lastname }}</h5>
+													{% for usercompany in user.getExperienceId() %}
+														{% if usercompany.endAt|date('dmY') == date()|date('dmY') %}
+															<p>Indisponible</p>
+														{% endif %}
+													{% endfor %}
 													<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
 													{% if is_granted("ROLE_SUPER_ADMIN") %}
 														<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>
@@ -122,6 +130,11 @@
 												<div class="card-body">
 													<h5 class="card-title">{{ user.firstname }}
 														{{ user.lastname }}</h5>
+													{% for usercompany in user.getExperienceId() %}
+														{% if usercompany.endAt|date('dmY') == date()|date('dmY') %}
+															<p>Indisponible</p>
+														{% endif %}
+													{% endfor %}
 													<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
 													{% if is_granted("ROLE_SUPER_ADMIN") %}
 														<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>
@@ -138,48 +151,51 @@
 					</div>
 				</div>
 			</div>
-		{% elseif  is_granted("ROLE_ADMIN") %}
-			<ul class="nav nav-tabs" id="myTab" role="tablist">
-				<li class="nav-item" role="presentation">
-					<button class="nav-link active" id="collaborateurs-tab" data-bs-toggle="tab" data-bs-target="#collaborateurs" type="button" role="tab" aria-controls="collaborateurs" aria-selected="true">Collaborateurs</button>
-				</li>
-				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="candidats-tab" data-bs-toggle="tab" data-bs-target="#candidats" type="button" role="tab" aria-controls="candidats" aria-selected="false">Candidats</button>
-				</li>
-			</ul>
-			<div class="tab-content" id="myTabContent">
-				<div class="tab-pane fade show active" id="collaborateurs" role="tabpanel" aria-labelledby="collaborateurs-tab">
-					<div class="card text-center">
-						<div class="card-body overflow-auto">
-							<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
-								<h2>Collaborateurs</h2>
-								{% for user in users %}
-									{% for child in user.childrens %}
-										{% if app.user.id != child.id %}
-											<div class="col">
-												<div class="card h-100">
-													<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
-													<p class="card-body">
-														<div class="container">
-															{% for userskill in child.userSkills %}
-																{% if userskill.getLiked() %}
-																	<span class="badge bg-primary">{{userskill.getSkillId().getName()}}</span>
-																{% else %}
-																	<span class="badge bg-danger">{{userskill.getSkillId().getName()}}</span>
-																{% endif %}
-															{% endfor %}
-														</div>
-														<div class="card-body">
-															<h5 class="card-title">{{ child.firstname }}
-																{{ child.lastname }}</h5>
-															<a class="btn btn-secondary" href="{{ path("user_show", {"id": child.id}) }}">Plus d'informations</a>
-															{% if is_granted("ROLE_SUPER_ADMIN") %}
-																<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>
+		</div>
+	{% elseif  is_granted("ROLE_ADMIN") %}
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+			<li class="nav-item" role="presentation">
+				<button class="nav-link active" id="collaborateurs-tab" data-bs-toggle="tab" data-bs-target="#collaborateurs" type="button" role="tab" aria-controls="collaborateurs" aria-selected="true">Collaborateurs</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" id="candidats-tab" data-bs-toggle="tab" data-bs-target="#candidats" type="button" role="tab" aria-controls="candidats" aria-selected="false">Candidats</button>
+			</li>
+		</ul>
+		<div class="tab-content" id="myTabContent">
+			<div class="tab-pane fade show active" id="collaborateurs" role="tabpanel" aria-labelledby="collaborateurs-tab">
+				<div class="card text-center">
+					<div class="card-body overflow-auto">
+						<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
+							<h2>Collaborateurs</h2>
+							{% for user in users %}
+								{% for child in user.childrens %}
+									{% if (app.user.id != child.id) and child.visibility == 1 %}
+										<div class="col">
+											<div class="card h-100">
+												<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
+												<div class="card-body">
+													<div class="container">
+														{% for userskill in child.userSkills %}
+															{% if userskill.getLiked() %}
+																<span class="badge bg-primary">{{userskill.getSkillId().getName()}}</span>
 															{% else %}
-																<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": child.id}) }}">Modifier</a>
+																<span class="badge bg-danger">{{userskill.getSkillId().getName()}}</span>
 															{% endif %}
-														</p>
-													</p>
+														{% endfor %}
+													</div>
+													<h5 class="card-title">{{ child.firstname }}
+														{{ child.lastname }}</h5>
+													{% for usercompany in child.getExperienceId() %}
+														{% if usercompany.endAt|date('dmY') == date()|date('dmY') %}
+															<p>Indisponible</p>
+														{% endif %}
+													{% endfor %}
+													<a class="btn btn-secondary" href="{{ path("user_show", {"id": child.id}) }}">Plus d'informations</a>
+													{% if is_granted("ROLE_SUPER_ADMIN") %}
+														<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>
+													{% else %}
+														<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": child.id}) }}">Modifier</a>
+													{% endif %}
 												</div>
 											</div>
 										</div>
@@ -196,13 +212,18 @@
 						<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
 							<h2>Candidats</h2>
 							{% for user in users %}
-								{% if (user.parent == NULL) and (user.roles == ['ROLE_USER']) %}
+								{% if (user.parent == NULL) and (user.roles == ['ROLE_USER']) and (user.visibility == 1) %}
 									<div class="col">
 										<div class="card h-100">
 											<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
 											<div class="card-body">
 												<h5 class="card-title">{{ user.firstname }}
 													{{ user.lastname }}</h5>
+												{% for usercompany in user.getExperienceId() %}
+													{% if usercompany.endAt|date('dmY') == date()|date('dmY') %}
+														<p>Indisponible</p>
+													{% endif %}
+												{% endfor %}
 												<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
 												<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": user.id}) }}">Modifier</a>
 											</div>
@@ -214,6 +235,7 @@
 					</div>
 				</div>
 			</div>
-			{% else %}
-		{% endif %}
-	{% endblock %}
+		</div>
+		{% else %}
+	{% endif %}
+{% endblock %}

@@ -33,5 +33,4 @@
 	</div>
 </nav>
 {% if is_granted("ROLE_ADMIN")  %}
-{{ render (controller('App\\Controller\\SearchController::searchBar'))}}
 {% endif %}

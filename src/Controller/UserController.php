@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Knp\Snappy\Pdf;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\UserAdminType;
@@ -16,7 +17,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Knp\Snappy\Pdf;
 
 class UserController extends AbstractController
 {
@@ -38,22 +38,22 @@ class UserController extends AbstractController
     {
         $user = $this->getUser();
 
-            $user = new User();
-            $form = $this->createForm(UserType::class, $user);
-            $form->handleRequest($request);
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($user);
-                $entityManager->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
 
-                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
-            }
+            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+        }
 
-            return $this->renderForm('user/new.html.twig', [
-                'user' => $user,
-                'form' => $form,
-            ]);
+        return $this->renderForm('user/new.html.twig', [
+            'user' => $user,
+            'form' => $form,
+        ]);
     }
 
     /**
@@ -69,13 +69,9 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
-     * @IsGranted("ROLE_USER")
      */
     public function edit(Request $request, User $user): Response
     {
-        $actualUser = $this->getUser();
-        if($actualUser->getId() == $user->getId() || in_array('ROLE_SUPER_ADMIN', $actualUser->getRoles(), true))
-        {
             $form = $this->createForm(UserType::class, $user);
             $form->handleRequest($request);
 
@@ -89,19 +85,15 @@ class UserController extends AbstractController
                 'user' => $user,
                 'form' => $form,
             ]);
-        }
-        else {
-            return $this->redirectToRoute('user');
-        }
     }
 
-        /**
+    /**
      * @Route("/{id}/edit_team", name="user_edit_team", methods={"GET","POST"})
      * @IsGranted("ROLE_ADMIN")
      */
     public function editTeam(Request $request, User $user): Response
     {
-        
+
         $form = $this->createForm(UserHierarchyType::class, $user);
         $form->handleRequest($request);
 
@@ -139,16 +131,14 @@ class UserController extends AbstractController
     public function delete(Request $request, User $user): Response
     {
         $actualUser = $this->getUser();
-        if(($actualUser->getId() == $user->getId() || in_array('ROLE_ADMIN', $actualUser->getRoles(), true)))
-        {
-            if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        if (($actualUser->getId() == $user->getId() || in_array('ROLE_ADMIN', $actualUser->getRoles(), true))) {
+            if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->remove($user);
                 $entityManager->flush();
             }
             return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
-        }
-        else {
+        } else {
             return $this->redirectToRoute('user');
         }
     }
@@ -177,29 +167,29 @@ class UserController extends AbstractController
     public function searchBar()
     {
         $form = $this->createFormBuilder(null)
-        ->add('choice', ChoiceType::class, [
-            'label' => 'Rechercher par :',
-            'attr' => [
-                'class' => 'w-50 form-control'
-            ],
-            'choices'  => array(
-                'nom' => 'user.lastname',
-                'compétences' => 'skill',
-                'appétences' => 'appetence',
-            )
-        ])
-        ->add('query', TextType::class, [
-            'label' => 'Rechercher',
-            'attr' => [
-                'class' => 'w-50 form-control'
-            ],
-        ])
-        ->add('submit', SubmitType::class, [
-            'attr' => [
-                'class' => 'mt-2 btn-danger'
-            ]
-        ])
-        ->getForm();
+            ->add('choice', ChoiceType::class, [
+                'label' => 'Rechercher par :',
+                'attr' => [
+                    'class' => 'w-50 form-control'
+                ],
+                'choices'  => array(
+                    'nom' => 'user.lastname',
+                    'compétences' => 'skill',
+                    'appétences' => 'appetence',
+                )
+            ])
+            ->add('query', TextType::class, [
+                'label' => 'Rechercher',
+                'attr' => [
+                    'class' => 'w-50 form-control'
+                ],
+            ])
+            ->add('submit', SubmitType::class, [
+                'attr' => [
+                    'class' => 'mt-2 btn-danger'
+                ]
+            ])
+            ->getForm();
         return $this->render('user/search_bar.html.twig', [
             'form' => $form->createView()
         ]);

@@ -1,16 +1,22 @@
 {{ form_start(form) }}
-        {{ form_row(form.lastname, {
-                label: 'Nom'
-        }) }}
-        {{ form_row(form.firstname, {
-                label: 'Prénom'
-        }) }}
-        {{ form_row(form.address, {
-                label: 'Adresse'
-        }) }}
-        {{ form_row(form.phone, {
-                label: 'Numéro de téléphone'
-        }) }}
+    {{ form_row(form.email, {
+        label: 'Adresse E-mail'
+    }) }}
+    {{ form_row(form.lastname, {
+        label: 'Nom'
+    }) }}
+	{{ form_row(form.firstname, {
+        label: 'Prénom'
+    }) }}
+	{{ form_row(form.address, {
+        label: 'Adresse'
+    }) }}
+	{{ form_row(form.phone, {
+        label: 'Numéro de téléphone'
+    }) }}
+    {{ form_row(form.visibility, {
+        label: 'Visibilité du profil :'
+    }) }}
         {{ form_row(form.register, {
                 label: 'Modifier'
         }) }}

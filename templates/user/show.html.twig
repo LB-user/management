@@ -136,6 +136,12 @@
 		</tr>
 	</tbody>
 </table>
+{% if is_granted("ROLE_USER") %}
 <a class="btn btn-primary" href="{{ path('user_edit', {"id": user.id}) }}">Modifier les informations du profil</a>
+{% elseif is_granted("ROLE_ADMIN") %}
+<a class="btn btn-primary" href="{{ path('edit-team', {"id": user.id}) }}">Modifier les informations du profil</a>
+{% elseif is_granted("ROLE_SUPER_ADMIN") %}
+<a class="btn btn-primary" href="{{ path('edit_admin', {"id": user.id}) }}">Modifier les informations du profil</a>
+{% endif %}
 {{ include('user/_delete_form.html.twig') }}
 <a href="{{ path('user') }}">Retour à la liste</a></div>{% endblock %}

@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\User;
-use App\Repository\UserRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -64,6 +63,12 @@ class UserAdminType extends AbstractType
                     ->orderBy('u.lastname', 'ASC');
                 }
             ])
+            ->add('visibility', ChoiceType::class, array(
+                'choices'  => array(
+                    'Visible' => 1,
+                    'Non visible' => 0
+                )
+            ))
             ->add('register', SubmitType::class, [
                 'attr' => [
                     'class' => 'mt-2 btn-danger'

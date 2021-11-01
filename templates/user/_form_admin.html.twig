@@ -22,10 +22,12 @@
 	{{ form_row(form.phone, {
         label: 'Numéro de téléphone'
     }) }}
+    {{ form_row(form.visibility, {
+        label: 'Visibilité du profil'
+    }) }}
 	{{ form_row(form.register, {
         label: 'Modifier'
     }) }}
 {% endif %}
 
 {{ form_end(form) }}
-<form method="post"

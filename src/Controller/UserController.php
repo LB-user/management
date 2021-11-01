@@ -107,8 +107,6 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('user_show', [], Response::HTTP_SEE_OTHER);
         }
         return $this->renderForm('user/edit_team.html.twig', [
             'user' => $user,
@@ -127,8 +125,6 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('user_show', [], Response::HTTP_SEE_OTHER);
         }
         return $this->renderForm('user/edit_admin.html.twig', [
             'user' => $user,

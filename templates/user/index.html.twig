@@ -4,131 +4,216 @@
 {% endblock %}
 
 {% block body %}
-{{ render (controller(
-	'App\\Controller\\SearchController::searchBar'
-))}}
-	<div class="card text-center">
-		<div class="card-body overflow-auto">
-			<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
-				<div class="container d-flex justify-content-center w-100">
-					<div class="card w-100">
-						<div class="card-body">
-							<h5 class="card-title">{{ app.user.firstname }}
-								{{ app.user.lastname }}</h5>
-							<p class="card-text">
-								Vous êtes connecté en tant que :
-								{% if is_granted("ROLE_SUPER_ADMIN") %}
-									Administrateur
-								{% elseif is_granted("ROLE_ADMIN") %}
-									Commercial
-								{% elseif (is_granted("ROLE_USER")) and app.user.parent %}
-									Collaborateur
-								{% else %}
-									Candidat
+	{{ include('user/partials/_infos_user.html.twig') }}
+	{% if is_granted("ROLE_ADMIN") or is_granted("ROLE_SUPER_ADMIN")%}
+		<a class="btn btn-primary" href="{{ path("app_register") }}">Créer un nouveau profil +</a>
+	{% endif %}
+	{% if is_granted("ROLE_SUPER_ADMIN") %}
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+			<li class="nav-item" role="presentation">
+				<button class="nav-link active" id="collaborateurs-tab" data-bs-toggle="tab" data-bs-target="#collaborateurs" type="button" role="tab" aria-controls="collaborateurs" aria-selected="true">Collaborateurs</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" id="candidats-tab" data-bs-toggle="tab" data-bs-target="#candidats" type="button" role="tab" aria-controls="candidats" aria-selected="false">Candidats</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" id="commerciaux-tab" data-bs-toggle="tab" data-bs-target="#commerciaux" type="button" role="tab" aria-controls="commerciaux" aria-selected="false">Autres</button>
+			</li>
+		</ul>
+		<div class="tab-content" id="myTabContent">
+			<div class="tab-pane fade show active" id="collaborateurs" role="tabpanel" aria-labelledby="collaborateurs-tab">
+				<div class="card text-center">
+					<div class="card-body overflow-auto">
+						<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
+							<h2>Collaborateurs</h2>
+							{% for user in users %}
+								{% if (user.parent != NULL) and (user.roles == ['ROLE_USER']) %}
+									<div class="col">
+										<div class="card h-100">
+											<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
+											<div class="card-body">
+												<div class="container">
+													{% for userskill in user.userSkills %}
+														{% if userskill.getLiked() %}
+															<span class="badge bg-primary">{{userskill.getSkillId().getName()}}</span>
+														{% else %}
+															<span class="badge bg-danger">{{userskill.getSkillId().getName()}}</span>
+														{% endif %}
+													{% endfor %}
+												</div>
+												<div class="card-body">
+													<h5 class="card-title">{{ user.firstname }}
+														{{ user.lastname }}</h5>
+													<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
+													{% if is_granted("ROLE_SUPER_ADMIN") %}
+														<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>
+													{% else %}
+														<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": user.id}) }}">Modifier</a>
+													{% endif %}
+												</div>
+											</div>
+										</div>
+									</div>
 								{% endif %}
-							</p>
-						</div>
-						<ul class="list-group list-group-flush">
-							<li class="list-group-item">{{ app.user.email }}</li>
-							<li class="list-group-item">{{ app.user.address }}</li>
-							<li class="list-group-item">{{ app.user.phone }}</li>
-						</ul>
-						<div class="card-body">
-							{% if is_granted("ROLE_SUPER_ADMIN") %}
-								<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": app.user.id}) }}">Modifier</a>
-							{% else %}
-								<a class="btn btn-primary" href="{{ path("user_edit", {"id": app.user.id}) }}">Modifier</a>
-							{% endif %}
-
-							<a class="btn btn-secondary" href="{{ path("user_show", {"id": app.user.id}) }}">Plus d'informations</a>
+							{% endfor %}
 						</div>
 					</div>
 				</div>
-				{% if is_granted("ROLE_SUPER_ADMIN") %}
-					{% for user in users %}
-						<div class="col">
-							<div class="card h-100">
-								<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
-								<div class="card-body">
-									<h5 class="card-title">{{ user.firstname }}
-										{{ user.lastname }}</h5>
-									<p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-									<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">
-										Plus d'informations
-									</a>
-									{% if is_granted("ROLE_SUPER_ADMIN") %}
-										<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>
-									{% else %}
-										<a class="btn btn-primary" href="{{ path("user_edit", {"id": user.id}) }}">Modifier</a>
-									{% endif %}
-								</div>
-							</div>
-						</div>
-					{% endfor %}
-				{% elseif  is_granted("ROLE_ADMIN") %}
-					<h2>Collaborateurs</h2>
-					{% for user in users %}
-						{% for child in user.childrens %}
-							{% if app.user.id != child.id %}
-								<div class="col">
-									<div class="card h-100">
-										<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
-										<p class="card-body">
-											<div class="container">
-												{% for userskill in child.userSkills %}
-													{% if userskill.getLiked() %}
-														<span class="badge bg-primary">{{userskill.getSkillId().getName()}}</span>
-													{% else %}
-														<span class="badge bg-danger">{{userskill.getSkillId().getName()}}</span>
-													{% endif %}
-												{% endfor %}
-											</div>
+			</div>
+			<div class="tab-pane fade" id="candidats" role="tabpanel" aria-labelledby="candidats-tab">
+				<div class="card text-center">
+					<div class="card-body overflow-auto">
+						<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
+							<h2>Candidats</h2>
+							{% for user in users %}
+								{% if (user.parent == NULL) and (user.roles == ['ROLE_USER']) %}
+									<div class="col">
+										<div class="card h-100">
+											<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
 											<div class="card-body">
-												<h5 class="card-title">{{ child.firstname }}
-													{{ child.lastname }}</h5>
-												<a class="btn btn-secondary" href="{{ path("user_show", {"id": child.id}) }}">Plus d'informations</a>
-												{% if is_granted("ROLE_SUPER_ADMIN") %}
-													<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>
-												{% else %}
-													<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": child.id}) }}">Modifier</a>
-												{% endif %}
-											</p>
-										</p>
+												<div class="container">
+													{% for userskill in user.userSkills %}
+														{% if userskill.getLiked() %}
+															<span class="badge bg-primary">{{userskill.getSkillId().getName()}}</span>
+														{% else %}
+															<span class="badge bg-danger">{{userskill.getSkillId().getName()}}</span>
+														{% endif %}
+													{% endfor %}
+												</div>
+												<div class="card-body">
+													<h5 class="card-title">{{ user.firstname }}
+														{{ user.lastname }}</h5>
+													<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
+													{% if is_granted("ROLE_SUPER_ADMIN") %}
+														<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>
+													{% else %}
+														<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": user.id}) }}">Modifier</a>
+													{% endif %}
+												</div>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-						{% endif %}
-					{% endfor %}
-				{% endfor %}
-			</div>
-		</div>
-	</div>
-	<div class="card text-center">
-		<div class="card-body overflow-auto">
-			<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
-				<h2>Candidats</h2>
-				{% for user in users %}
-					{% if (user.parent == NULL) and (user.roles == ['ROLE_USER']) %}
-						<div class="col">
-							<div class="card h-100">
-								<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
-								<div class="card-body">
-									<h5 class="card-title">{{ user.firstname }}
-										{{ user.lastname }}</h5>
-									<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
-									<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": user.id}) }}">Modifier</a>
-								</div>
-							</div>
+								{% endif %}
+							{% endfor %}
 						</div>
-					{% endif %}
-				{% endfor %}
+					</div>
+				</div>
 			</div>
-		</div>
-	</div>
-	{% else %}
-{% endif %}
-{% if is_granted("ROLE_ADMIN") %}
-	<a class="btn btn-primary" href="{{ path("app_register") }}">
-		Créer un nouveau profil +
-	</a>
-{% endif %}</div></div></div>{% endblock %}
+			<div class="tab-pane fade" id="commerciaux" role="tabpanel" aria-labelledby="commerciaux-tab">
+				<div class="card text-center">
+					<div class="card-body overflow-auto">
+						<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
+							<h2>Autres</h2>
+							{% for user in users %}
+								{% if user.roles != ['ROLE_USER'] %}
+									<div class="col">
+										<div class="card h-100">
+											<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
+											<div class="card-body">
+												<div class="container">
+													{% for userskill in user.userSkills %}
+														{% if userskill.getLiked() %}
+															<span class="badge bg-primary">{{userskill.getSkillId().getName()}}</span>
+														{% else %}
+															<span class="badge bg-danger">{{userskill.getSkillId().getName()}}</span>
+														{% endif %}
+													{% endfor %}
+												</div>
+												<div class="card-body">
+													<h5 class="card-title">{{ user.firstname }}
+														{{ user.lastname }}</h5>
+													<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
+													{% if is_granted("ROLE_SUPER_ADMIN") %}
+														<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>
+													{% else %}
+														<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": user.id}) }}">Modifier</a>
+													{% endif %}
+												</div>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+		{% elseif  is_granted("ROLE_ADMIN") %}
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				<li class="nav-item" role="presentation">
+					<button class="nav-link active" id="collaborateurs-tab" data-bs-toggle="tab" data-bs-target="#collaborateurs" type="button" role="tab" aria-controls="collaborateurs" aria-selected="true">Collaborateurs</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="candidats-tab" data-bs-toggle="tab" data-bs-target="#candidats" type="button" role="tab" aria-controls="candidats" aria-selected="false">Candidats</button>
+				</li>
+			</ul>
+			<div class="tab-content" id="myTabContent">
+				<div class="tab-pane fade show active" id="collaborateurs" role="tabpanel" aria-labelledby="collaborateurs-tab">
+					<div class="card text-center">
+						<div class="card-body overflow-auto">
+							<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
+								<h2>Collaborateurs</h2>
+								{% for user in users %}
+									{% for child in user.childrens %}
+										{% if app.user.id != child.id %}
+											<div class="col">
+												<div class="card h-100">
+													<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
+													<p class="card-body">
+														<div class="container">
+															{% for userskill in child.userSkills %}
+																{% if userskill.getLiked() %}
+																	<span class="badge bg-primary">{{userskill.getSkillId().getName()}}</span>
+																{% else %}
+																	<span class="badge bg-danger">{{userskill.getSkillId().getName()}}</span>
+																{% endif %}
+															{% endfor %}
+														</div>
+														<div class="card-body">
+															<h5 class="card-title">{{ child.firstname }}
+																{{ child.lastname }}</h5>
+															<a class="btn btn-secondary" href="{{ path("user_show", {"id": child.id}) }}">Plus d'informations</a>
+															{% if is_granted("ROLE_SUPER_ADMIN") %}
+																<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>
+															{% else %}
+																<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": child.id}) }}">Modifier</a>
+															{% endif %}
+														</p>
+													</p>
+												</div>
+											</div>
+										</div>
+									{% endif %}
+								{% endfor %}
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="candidats" role="tabpanel" aria-labelledby="candidats-tab">
+				<div class="card text-center">
+					<div class="card-body overflow-auto">
+						<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
+							<h2>Candidats</h2>
+							{% for user in users %}
+								{% if (user.parent == NULL) and (user.roles == ['ROLE_USER']) %}
+									<div class="col">
+										<div class="card h-100">
+											<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
+											<div class="card-body">
+												<h5 class="card-title">{{ user.firstname }}
+													{{ user.lastname }}</h5>
+												<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
+												<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": user.id}) }}">Modifier</a>
+											</div>
+										</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+			{% else %}
+		{% endif %}
+	{% endblock %}

@@ -11,23 +11,27 @@
 						<a class="nav-link" href="{{ path('user')}}">Dashboard</a>
 					</li>
 				{% endif %}
-			{% if is_granted("ROLE_SUPER_ADMIN")  %}
-				<li class="nav-item">
-					<a class="nav-link" href="{{ path('user_skill')}}">Attribution des compétences</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{{ path('skill')}}">Compétences</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{{ path('experience')}}">Experiences</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{{ path('company')}}">Entreprises</a>
-				</li>
-			{% endif %}
-		</ul>
-		<div class="d-flex">
-			<a href="{{ path('app_logout') }}" class="btn btn-danger me-sm-2" type="text" placeholder="Search">Se déconnecter</a>
+				{% if is_granted("ROLE_SUPER_ADMIN")  %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('user_skill')}}">Attribution des compétences</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('skill')}}">Compétences</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('experience')}}">Experiences</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('company')}}">Entreprises</a>
+					</li>
+				{% endif %}
+			</ul>
+			<div class="d-flex">
+				<a href="{{ path('app_logout') }}" class="btn btn-danger me-sm-2" type="text" placeholder="Search">Se déconnecter</a>
+			</div>
 		</div>
 	</div>
-</div></nav>
+</nav>
+{% if is_granted("ROLE_ADMIN")  %}
+{{ render (controller('App\\Controller\\SearchController::searchBar'))}}
+{% endif %}

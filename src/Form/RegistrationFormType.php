@@ -3,8 +3,10 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Form\AddressType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -39,9 +41,6 @@ class RegistrationFormType extends AbstractType
                 'attr' => ['class' => 'w-50 form-control']
             ]
         ])
-        ->add('address', TextType::class, [
-            'attr' => ['class' => 'w-50 form-control'],
-        ])
         ->add('phone', TextType::class, [
             'attr' => ['class' => 'w-50 form-control'],
         ])
@@ -54,6 +53,7 @@ class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'cascade_validation' => true,
         ]);
     }
 }

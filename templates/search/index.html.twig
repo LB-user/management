@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+{{ include('user/partials/_infos_user.html.twig') }}
 {{ render (controller('App\\Controller\\SearchController::searchBar'))}}
 	{% if app.request.method == 'POST' %}
 		<div>

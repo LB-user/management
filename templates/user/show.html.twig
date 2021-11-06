@@ -42,9 +42,21 @@
 					<th>Numéro de téléphone</th>
 					<td>{{ user.phone }}</td>
 				</tr>
+
 				<tr>
 					<th>Adresse</th>
-					<td>{{ user.address }}</td>
+					<td>
+						{% if user.getAddress() %}
+							{{ user.getAddress().getNbRoad() }}
+							{{ user.getAddress().getRoad() }}<br>
+							{{ user.getAddress().getCp() }}
+							{{ user.getAddress().getCity() }}<br>
+							{{ user.getAddress().getCountry() }}<br>
+							<a href="{{ path("address_edit_user", {"id": user.getAddress().id}) }}" class="card-link">Modifier adresse</a>
+						{% else %}
+							<a href="{{ path("address_new_user", {"id": user.id}) }}" class="card-link">Ajouter adresse</a>
+						{% endif %}
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -99,7 +111,7 @@
 												</div>
 											</div>
 										{% endfor %}
-										<a href="{{ path("experience_new", {"id": user.id}) }}" class="card-link">Ajouter une compétence</a>
+										<a href="{{ path("experience_new", {"id": user.id}) }}" class="card-link">Ajouter une experience</a>
 									</div>
 								</div>
 							</div>
@@ -148,8 +160,10 @@
 													</div>
 													<div class="card-body">
 														<p class="card-text">
-															{{ usercompany.getCompany().getAddress().getNbRoad() }} {{ usercompany.getCompany().getAddress().getRoad() }}<br>
-															{{ usercompany.getCompany().getAddress().getCp() }} {{ usercompany.getCompany().getAddress().getCity() }}<br>
+															{{ usercompany.getCompany().getAddress().getNbRoad() }}
+															{{ usercompany.getCompany().getAddress().getRoad() }}<br>
+															{{ usercompany.getCompany().getAddress().getCp() }}
+															{{ usercompany.getCompany().getAddress().getCity() }}<br>
 															{{ usercompany.getCompany().getAddress().getCountry() }}</p>
 														<p class="card-text">{{ usercompany.getCompany().getContact() }}</p>
 													</div>

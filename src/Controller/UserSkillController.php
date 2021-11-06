@@ -18,10 +18,11 @@ class UserSkillController extends AbstractController
 {
     protected $auth;
 
-    public function __construct(AuthorizationCheckerInterface $auth) {
+    public function __construct(AuthorizationCheckerInterface $auth)
+    {
         $this->auth = $auth;
     }
-    
+
     /**
      * @Route("/user/skill", name="user_skill")
      * @IsGranted("ROLE_SUPER_ADMIN")
@@ -39,28 +40,28 @@ class UserSkillController extends AbstractController
      */
     public function new(Request $request, EntityManagerInterface $em): Response
     {
-            $id = $request->query->get('id');
-            $user = $em->getRepository(User::class)->findOneBy(['id' => $id]);
+        $id = $request->query->get('id');
+        $user = $em->getRepository(User::class)->findOneBy(['id' => $id]);
 
-            $userSkill = new UserSkill();
-            $form = $this->createForm(UserSkillType::class, $userSkill);
-            $form->handleRequest($request);
+        $userSkill = new UserSkill();
+        $form = $this->createForm(UserSkillType::class, $userSkill);
+        $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                if(!$this->auth->isGranted('ROLE_SUPER_ADMIN')) {
+        if ($form->isSubmitted() && $form->isValid()) {
+            if (!$this->auth->isGranted('ROLE_SUPER_ADMIN')) {
                 $userSkill->setUserId($user);
-                }
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->persist($userSkill);
-                $entityManager->flush();
-
-                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
             }
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($userSkill);
+            $entityManager->flush();
 
-            return $this->renderForm('user_skill/new.html.twig', [
-                'user_skill' => $userSkill,
-                'form' => $form,
-            ]);
+            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('user_skill/new.html.twig', [
+            'user_skill' => $userSkill,
+            'form' => $form,
+        ]);
     }
 
     /**
@@ -80,19 +81,22 @@ class UserSkillController extends AbstractController
      */
     public function edit(Request $request, UserSkill $userSkill): Response
     {
-            $form = $this->createForm(UserSkillType::class, $userSkill);
-            $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+        $this->denyAccessUnlessGranted('userskill_edit', $userSkill);
 
-                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
-            }
+        $form = $this->createForm(UserSkillType::class, $userSkill);
+        $form->handleRequest($request);
 
-            return $this->renderForm('user_skill/edit.html.twig', [
-                'user_skill' => $userSkill,
-                'form' => $form,
-            ]);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('user_skill/edit.html.twig', [
+            'user_skill' => $userSkill,
+            'form' => $form,
+        ]);
     }
 
     /**
@@ -101,12 +105,13 @@ class UserSkillController extends AbstractController
      */
     public function delete(Request $request, UserSkill $userSkill): Response
     {
-            if ($this->isCsrfTokenValid('delete'.$userSkill->getId(), $request->request->get('_token'))) {
-                $entityManager = $this->getDoctrine()->getManager();
-                $entityManager->remove($userSkill);
-                $entityManager->flush();
-            }
-            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
-        
+        $this->denyAccessUnlessGranted('userskill_delete', $userSkill);
+
+        if ($this->isCsrfTokenValid('delete' . $userSkill->getId(), $request->request->get('_token'))) {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->remove($userSkill);
+            $entityManager->flush();
+        }
+        return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
     }
 }

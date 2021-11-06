@@ -90,6 +90,8 @@ class DocumentController extends AbstractController
     public function edit(Request $request, Document $document): Response
     {
 
+        $this->denyAccessUnlessGranted('document_edit', $document);
+
         $form = $this->createForm(DocumentType::class, $document);
         $form->handleRequest($request);
 
@@ -112,6 +114,8 @@ class DocumentController extends AbstractController
      */
     public function delete(Request $request, Document $document): Response
     {
+        $this->denyAccessUnlessGranted('document_delete', $document);
+
         if ($this->isCsrfTokenValid('delete' . $document->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($document);

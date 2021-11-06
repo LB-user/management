@@ -26,6 +26,7 @@ class SkillController extends AbstractController
 
     /**
      * @Route("skill/new", name="skill_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function new(Request $request): Response
     {
@@ -60,6 +61,7 @@ class SkillController extends AbstractController
 
     /**
      * @Route("skill/{id}/edit", name="skill_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function edit(Request $request, Skill $skill): Response
     {
@@ -81,6 +83,7 @@ class SkillController extends AbstractController
 
     /**
      * @Route("skill/{id}", name="skill_delete", methods={"POST"})
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function delete(Request $request, Skill $skill): Response
     {

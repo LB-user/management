@@ -42,6 +42,7 @@ class AddressController extends AbstractController
 
     /**
      * @Route("address/new_company", name="address_new_company", methods={"GET","POST"})
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function newCompanyAddress(Request $request): Response
     {
@@ -65,10 +66,10 @@ class AddressController extends AbstractController
 
     /**
      * @Route("address/new_user", name="address_new_user", methods={"GET","POST"})
+     * @IsGranted("ROLE_USER")
      */
     public function newUserAddress(Request $request, EntityManagerInterface $em): Response
     {
-
         $id = $request->query->get('id');
         $user = $em->getRepository(User::class)->findOneBy(['id' => $id]);
 
@@ -107,6 +108,7 @@ class AddressController extends AbstractController
 
     /**
      * @Route("address/{id}/edit_company", name="address_edit_company", methods={"GET","POST"})
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function editCompany(Request $request, Address $address): Response
     {
@@ -127,14 +129,17 @@ class AddressController extends AbstractController
 
         /**
      * @Route("address/{id}/edit_user", name="address_edit_user", methods={"GET","POST"})
+     * @IsGranted("ROLE_USER")
      */
-    public function editUser(Request $request, Address $address, DateTimeImmutable $date): Response
+    public function editUser(Request $request, Address $address): Response
     {
+
+        $this->denyAccessUnlessGranted('address_edit', $address);
         $form = $this->createForm(AddressType::class, $address);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->getUser()->setChangedAt($date);
+            $this->getUser()->setChangedAt(new DateTimeImmutable());
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
@@ -148,6 +153,7 @@ class AddressController extends AbstractController
 
     /**
      * @Route("address/{id}", name="address_delete", methods={"POST"})
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function delete(Request $request, Address $address): Response
     {

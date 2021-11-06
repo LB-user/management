@@ -25,11 +25,6 @@ class Company
     private $name;
 
     /**
-     * @ORM\Column(type="text")
-     */
-    private $address;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $contact;
@@ -39,9 +34,15 @@ class Company
      */
     private $experience;
 
+    /**
+     * @ORM\OneToOne(targetEntity=Address::class, mappedBy="company", cascade={"persist", "remove"})
+     */
+    private $address;
+
     public function __construct()
     {
         $this->experience = new ArrayCollection();
+        $this->addresses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -57,18 +58,6 @@ class Company
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(string $address): self
-    {
-        $this->address = $address;
 
         return $this;
     }
@@ -111,6 +100,28 @@ class Company
                 $experience->setCompany(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($address === null && $this->address !== null) {
+            $this->address->setCompany(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($address !== null && $address->getCompany() !== $this) {
+            $address->setCompany($this);
+        }
+
+        $this->address = $address;
 
         return $this;
     }

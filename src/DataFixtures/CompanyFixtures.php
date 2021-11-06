@@ -9,12 +9,12 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 class CompanyFixtures extends Fixture
 {
     public const FAKE_COMPANY = [
-        ['Azer', "2 rue azer 37000 Tours", "23.38.85.18.1232"],
-        ['Opqs', "4 rue azer 37000 Tours", "23.38.85.18.156"],
-        ['Dfgh', "5 rue azer 37000 Tours", "23.38.85.18.134"],
-        ['Jklm', "6 rue azer 37000 Tours", "23.38.85.18.1098"],
-        ['Wxcv', "7 rue azer 37000 Tours", "23.38.85.18.198"],
-        ['Bnaz', "1 rue azer 37000 Tours", "23.38.85.18.167"]
+        ['Azer', "23.38.85.18.1232"],
+        ['Opqs', "23.38.85.18.156"],
+        ['Dfgh', "23.38.85.18.134"],
+        ['Jklm', "23.38.85.18.1098"],
+        ['Wxcv', "23.38.85.18.198"],
+        ['Bnaz', "23.38.85.18.167"]
     ];
 
     public function load(ObjectManager $manager): void
@@ -25,8 +25,7 @@ class CompanyFixtures extends Fixture
 
             $company
                 ->setName($fakeCompany[0])
-                ->setAddress($fakeCompany[1])
-                ->setContact($fakeCompany[2])
+                ->setContact($fakeCompany[1])
                 ;
 
             $manager->persist($company);

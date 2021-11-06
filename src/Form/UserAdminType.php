@@ -43,11 +43,6 @@ class UserAdminType extends AbstractType
                     'class' => 'form-control'
             ],
             ])
-            ->add('address', TextType::class, [
-                'attr' => [
-                    'class' => 'form-control'
-            ],
-            ])
             ->add('phone', TextType::class, [
                 'attr' => [
                     'class' => 'form-control'

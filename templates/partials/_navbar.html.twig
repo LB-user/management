@@ -27,13 +27,16 @@
 					<li class="nav-item">
 						<a class="nav-link" href="{{ path('document')}}">Documents</a>
 					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('address')}}">Adresses</a>
+					</li>
 				{% endif %}
 			</ul>
 			<div class="d-flex">
+				<a href="{{ path('user_edit_password', {'id': app.user.id}) }}" class="btn btn-secondary me-sm-2" type="text" placeholder="Search">Changer mot de passe</a>
 				<a href="{{ path('app_logout') }}" class="btn btn-danger me-sm-2" type="text" placeholder="Search">Se déconnecter</a>
 			</div>
 		</div>
 	</div>
 </nav>
-{% if is_granted("ROLE_ADMIN")  %}
-{% endif %}
+{% if is_granted("ROLE_ADMIN")  %}{% endif %}

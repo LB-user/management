@@ -12,7 +12,11 @@
 				</tr>
 				<tr>
 					<th>Adresse de l'Entreprise</th>'
-					<td>{{ company.address }}</td>
+					<td>
+					{{ company.getAddress().getNbRoad() }} {{ company.getAddress().getRoad() }}<br>
+					{{ company.getAddress().getCp() }} {{ company.getAddress().getCity() }}<br>
+					{{ company.getAddress().getCountry() }}<br>
+					</td>
 				</tr>
 				<tr>
 					<th>Numéro de téléphone du contact de l'Entreprise</th>

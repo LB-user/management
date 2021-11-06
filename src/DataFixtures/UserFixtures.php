@@ -3,7 +3,6 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
-use App\Entity\Experience;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -44,7 +43,6 @@ class UserFixtures extends Fixture
             )
             ->setFirstname($fakeadmin[2])
             ->setLastname($fakeadmin[3])
-            ->setAddress($fakeadmin[4])
             ->setPhone($fakeadmin[5])
             ->setVisibility(0);
                 
@@ -66,7 +64,6 @@ class UserFixtures extends Fixture
             )
             ->setFirstname($fakeuser[2])
             ->setLastname($fakeuser[3])
-            ->setAddress($fakeuser[4])
             ->setPhone($fakeuser[5])
             ->setParent($manager->getRepository(User::class)
             ->findOneBy(['firstname' => $fakeuser[6]]))
@@ -93,7 +90,6 @@ class UserFixtures extends Fixture
         )
         ->setFirstname('Z')
         ->setLastname('Z')
-        ->setAddress('Pas là non plus')
         ->setPhone('23.38.85.18.15')
         ->setVisibility(0);
 

@@ -10,6 +10,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -55,7 +56,16 @@ class ExperienceType extends AbstractType
                 'date_widget' =>'single_text',
                 'required' => false,
             ))
-            ->add('details')
+            ->add('job', TextType::class, [
+                'attr' => [
+                    'class' => 'w-50 form-control'
+                ],
+            ])
+            ->add('details', TextType::class, [
+                'attr' => [
+                    'class' => 'w-50 form-control'
+                ],
+            ])
             ->add('register', SubmitType::class, [
                 'attr' => [
                     'class' => 'mt-2 btn-danger'
@@ -72,7 +82,7 @@ class ExperienceType extends AbstractType
                     return $er->createQueryBuilder('u')                 
                     ->orderBy('u.name', 'ASC');
                 }
-        ])
+            ])
             ->add('start_at', DateTimeType::class, array(
                 'input' => 'datetime_immutable',
                 'date_widget' =>'single_text',
@@ -82,6 +92,11 @@ class ExperienceType extends AbstractType
                 'date_widget' =>'single_text',
                 'required' => false,
             ))
+            ->add('job', TextType::class, [
+                'attr' => [
+                    'class' => 'w-50 form-control'
+                ],
+            ])
             ->add('details')
             ->add('register', SubmitType::class, [
                 'attr' => [

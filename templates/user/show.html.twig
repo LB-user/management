@@ -42,9 +42,21 @@
 					<th>Numéro de téléphone</th>
 					<td>{{ user.phone }}</td>
 				</tr>
+
 				<tr>
 					<th>Adresse</th>
-					<td>{{ user.address }}</td>
+					<td>
+						{% if user.getAddress() %}
+							{{ user.getAddress().getNbRoad() }}
+							{{ user.getAddress().getRoad() }}<br>
+							{{ user.getAddress().getCp() }}
+							{{ user.getAddress().getCity() }}<br>
+							{{ user.getAddress().getCountry() }}<br>
+							<a href="{{ path("address_edit_user", {"id": user.getAddress().id}) }}" class="card-link">Modifier adresse</a>
+						{% else %}
+							<a href="{{ path("address_new_user", {"id": user.id}) }}" class="card-link">Ajouter adresse</a>
+						{% endif %}
+					</td>
 				</tr>
 			</tbody>
 		</table>
@@ -99,18 +111,18 @@
 												</div>
 											</div>
 										{% endfor %}
-										<a href="{{ path("experience_new", {"id": user.id}) }}" class="card-link">Ajouter une compétence</a>
+										<a href="{{ path("experience_new", {"id": user.id}) }}" class="card-link">Ajouter une experience</a>
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="accordion-item">
-							<h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+							<h2 class="accordion-header" id="panelsStayOpen-headingThree">
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
 									Voir les documents
 								</button>
 							</h2>
-							<div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+							<div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
 								<div class="accordion-body">
 									<div class="row row-cols-1 row-cols-md-4 g-4">
 										{% for userdocument in user.getdocument() %}
@@ -133,12 +145,12 @@
 						</div>
 						{% if (user.parent != NULL) or (app.user.id == user.id) %}
 							<div class="accordion-item">
-								<h2 class="accordion-header" id="panelsStayOpen-headingThree">
-									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+								<h2 class="accordion-header" id="panelsStayOpen-headingFour">
+									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
 										Voir l'entreprise actuelle
 									</button>
 								</h2>
-								<div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+								<div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
 									<div class="accordion-body">
 										{% for usercompany in user.getExperienceId() %}
 											{% if usercompany.endAt|date('dmY') == date()|date('dmY') %}
@@ -147,7 +159,12 @@
 														{{ usercompany.getCompany().getName() }}
 													</div>
 													<div class="card-body">
-														<p class="card-text">{{ usercompany.getCompany().getAddress() }}</p>
+														<p class="card-text">
+															{{ usercompany.getCompany().getAddress().getNbRoad() }}
+															{{ usercompany.getCompany().getAddress().getRoad() }}<br>
+															{{ usercompany.getCompany().getAddress().getCp() }}
+															{{ usercompany.getCompany().getAddress().getCity() }}<br>
+															{{ usercompany.getCompany().getAddress().getCountry() }}</p>
 														<p class="card-text">{{ usercompany.getCompany().getContact() }}</p>
 													</div>
 												</div>

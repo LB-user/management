@@ -67,6 +67,8 @@ class UserController extends AbstractController
      */
     public function show(User $user): Response
     {
+        $this->denyAccessUnlessGranted('user_show', $user);
+
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
@@ -78,6 +80,8 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user): Response
     {
+        $this->denyAccessUnlessGranted('user_edit', $user);
+
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
@@ -140,6 +144,8 @@ class UserController extends AbstractController
      */
     public function editPassword(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasherInterface): Response
     {
+        $this->denyAccessUnlessGranted('user_edit_password', $user);
+
         $form = $this->createForm(UserPasswordType::class, $user);
         $form->handleRequest($request);
 
@@ -169,6 +175,8 @@ class UserController extends AbstractController
      */
     public function delete(Request $request, User $user): Response
     {
+        $this->denyAccessUnlessGranted('user_delete', $user);
+
         $actualUser = $this->getUser();
         if (($actualUser->getId() == $user->getId() || in_array('ROLE_ADMIN', $actualUser->getRoles(), true))) {
             if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
@@ -188,6 +196,8 @@ class UserController extends AbstractController
      */
     public function pdfAction(Pdf $knpSnappyPdf, User $user)
     {
+        $this->denyAccessUnlessGranted('user_cv', $user);
+
         $date = date('Y_m_d');
         $lastname = $user->getLastName();
         $firstname = $user->getFirstName();

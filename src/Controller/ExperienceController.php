@@ -78,9 +78,13 @@ class ExperienceController extends AbstractController
 
     /**
      * @Route("experience/{id}/edit", name="experience_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_USER")
      */
     public function edit(Request $request, Experience $experience): Response
-    {$form = $this->createForm(ExperienceType::class, $experience);
+    {
+        $this->denyAccessUnlessGranted('experience_edit', $experience);
+
+        $form = $this->createForm(ExperienceType::class, $experience);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -98,9 +102,13 @@ class ExperienceController extends AbstractController
 
     /**
      * @Route("experience/{id}", name="experience_delete", methods={"POST"})
+     * @IsGranted("ROLE_USER")
      */
     public function delete(Request $request, Experience $experience): Response
     {
+        $this->denyAccessUnlessGranted('experience_delete', $experience);
+
+
         if ($this->isCsrfTokenValid('delete' . $experience->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($experience);

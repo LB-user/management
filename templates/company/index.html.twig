@@ -56,7 +56,6 @@
 					<tr>
 						<th scope="col">Id</th>
 						<th scope="col">Nom de l'Entreprise</th>
-						<th scope="col">Adresse de l'Entreprise</th>
 						<th scope="col">Numéro de contact de l'Entreprise</th>
 						<th scope="col">Actions</th>
 					</tr>
@@ -68,7 +67,6 @@
 						<tr class="table-active">
 							<th scope="row">{{ company.id }}</th>
 							<td>{{ company.name }}</td>
-							<td>{{ company.address }}</td>
 							<td>{{ company.contact }}</td>
 							<td>
 								<a class="btn btn-secondary" href="{{ path("company_show", {"id": company.id}) }}">Plus d'informations</a>

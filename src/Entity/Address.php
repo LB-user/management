@@ -43,7 +43,7 @@ class Address
     private $country;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Company::class, inversedBy="addresses")
+     * @ORM\OneToOne(targetEntity=Company::class, inversedBy="address", cascade={"persist", "remove"})
      */
     private $company;
 

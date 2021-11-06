@@ -15,7 +15,8 @@ class AddressFixtures extends Fixture implements DependentFixtureInterface
         ['89','Rue du charme','Nante', '44000', 'France' ,'Opqs'],
         ['98','Avenue deparla','NY', '10002', 'Etats-Unis', 'Dfgh'],
         ['37','Rue lol','Boston', '02108', 'Etats-Unis', 'Jklm'],
-        ['35','Rue boustifaille','Montreal', '11290', 'Canada', 'Bnaz']
+        ['35','Rue boustifaille','Montreal', '11290', 'Canada', 'Bnaz'],
+        ['12','Rue des Alouettes','Tours', '37000', 'France', 'Wxcv']
     ];
 
     public function load(ObjectManager $manager): void

@@ -25,11 +25,6 @@ class Company
     private $name;
 
     /**
-     * @ORM\Column(type="text")
-     */
-    private $address;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $contact;
@@ -40,9 +35,9 @@ class Company
     private $experience;
 
     /**
-     * @ORM\OneToMany(targetEntity=Address::class, mappedBy="company")
+     * @ORM\OneToOne(targetEntity=Address::class, mappedBy="company", cascade={"persist", "remove"})
      */
-    private $addresses;
+    private $address;
 
     public function __construct()
     {
@@ -63,18 +58,6 @@ class Company
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(string $address): self
-    {
-        $this->address = $address;
 
         return $this;
     }
@@ -121,32 +104,24 @@ class Company
         return $this;
     }
 
-    /**
-     * @return Collection|Address[]
-     */
-    public function getAddresses(): Collection
+    public function getAddress(): ?Address
     {
-        return $this->addresses;
+        return $this->address;
     }
 
-    public function addAddress(Address $address): self
+    public function setAddress(?Address $address): self
     {
-        if (!$this->addresses->contains($address)) {
-            $this->addresses[] = $address;
+        // unset the owning side of the relation if necessary
+        if ($address === null && $this->address !== null) {
+            $this->address->setCompany(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($address !== null && $address->getCompany() !== $this) {
             $address->setCompany($this);
         }
 
-        return $this;
-    }
-
-    public function removeAddress(Address $address): self
-    {
-        if ($this->addresses->removeElement($address)) {
-            // set the owning side to null (unless already changed)
-            if ($address->getCompany() === $this) {
-                $address->setCompany(null);
-            }
-        }
+        $this->address = $address;
 
         return $this;
     }

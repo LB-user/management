@@ -20,7 +20,16 @@ class CompanyType extends AbstractType
             ->add('name', TextType::class, [
                 'attr' => ['class' => 'w-50 form-control'],
             ])
-            ->add('contact', TextType::class, [
+            ->add('lastname', TextType::class, [
+                'attr' => ['class' => 'w-50 form-control'],
+            ])
+            ->add('firstname', TextType::class, [
+                'attr' => ['class' => 'w-50 form-control'],
+            ])
+            ->add('phone', TextType::class, [
+                'attr' => ['class' => 'w-50 form-control'],
+            ])
+            ->add('email', TextType::class, [
                 'attr' => ['class' => 'w-50 form-control'],
             ])
             ->add('register', SubmitType::class, [

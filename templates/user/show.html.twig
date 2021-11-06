@@ -156,16 +156,29 @@
 											{% if usercompany.endAt|date('dmY') == date()|date('dmY') %}
 												<div class="card text-center">
 													<div class="card-header">
+													Nom de l'entreprise : <br>
 														{{ usercompany.getCompany().getName() }}
 													</div>
 													<div class="card-body">
 														<p class="card-text">
+														Adresse : <br>
 															{{ usercompany.getCompany().getAddress().getNbRoad() }}
 															{{ usercompany.getCompany().getAddress().getRoad() }}<br>
 															{{ usercompany.getCompany().getAddress().getCp() }}
 															{{ usercompany.getCompany().getAddress().getCity() }}<br>
 															{{ usercompany.getCompany().getAddress().getCountry() }}</p>
-														<p class="card-text">{{ usercompany.getCompany().getContact() }}</p>
+														<p class="card-text">
+														Contact : <br>
+														{{ usercompany.getCompany().getLastName() }} {{ usercompany.getCompany().getFirstName() }} <br>
+														{% if usercompany.getCompany().getPhone() %}
+														Numéro de téléphone : 
+														{{ usercompany.getCompany().getPhone() }}<br>
+														{% endif %}
+														{% if usercompany.getCompany().getEmail() %}
+														Email : 
+														{{ usercompany.getCompany().getEmail() }}<br>
+														{% endif %}
+														</p>
 													</div>
 												</div>
 											{% endif %}

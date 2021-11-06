@@ -2,8 +2,17 @@
         {{ form_row(form.name, {
                 label: 'Nom de l\'Entreprise'
         }) }}
-        {{ form_row(form.contact, {
-                label: 'Numéro de contact de l\'entreprise'
+        {{ form_row(form.lastname, {
+                label: 'Nom du contact'
+        }) }}
+        {{ form_row(form.firstname, {
+                label: 'Prénom du contact'
+        }) }}
+        {{ form_row(form.phone, {
+                label: 'Numéro de téléphone du contacte'
+        }) }}
+        {{ form_row(form.email, {
+                label: 'Email du contact'
         }) }}
         {{ form_row(form.register, {
                 label: 'Modifier'

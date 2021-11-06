@@ -13,19 +13,41 @@
 				<tr>
 					<th>Adresse de l'Entreprise</th>'
 					<td>
-					{{ company.getAddress().getNbRoad() }} {{ company.getAddress().getRoad() }}<br>
-					{{ company.getAddress().getCp() }} {{ company.getAddress().getCity() }}<br>
-					{{ company.getAddress().getCountry() }}<br>
+						{{ company.getAddress().getNbRoad() }}
+						{{ company.getAddress().getRoad() }}<br>
+						{{ company.getAddress().getCp() }}
+						{{ company.getAddress().getCity() }}<br>
+						{{ company.getAddress().getCountry() }}<br>
 					</td>
 				</tr>
 				<tr>
-					<th>Numéro de téléphone du contact de l'Entreprise</th>
-					<td>{{ company.contact }}</td>
+					<th>Nom du contact</th>'
+					<td>
+						{{ company.getLastName() }}
+						{{ company.getFirstName() }}
+					</td>
 				</tr>
+				{% if company.getPhone() %}
+					<tr>
+						<th>Numéro de téléphone du contact</th>
+						<td>
+							{{ company.getPhone() }}<br>
+						</td>
+					</tr>
+				{% endif %}
+				{% if company.getEmail() %}
+					<tr>
+						<th>Email du contact</th>
+						<td>
+							{{ company.getEmail() }}<br>
+						</td>
+					</tr>
+				{% endif %}
 			</tbody>
 		</table>
 		<a class="btn btn-primary" href="{{ path('company_edit', {"id": company.id}) }}">Modifier les informations du profil</a>
-		{{ include('company/_delete_form.html.twig') }}
-		<a href="{{ path('company') }}">Retour à la liste</a>
+		{{ include('company/_delete_form.html.twig') }}<a href="{{ path('company') }}">Retour à la liste</a>
 	</div>
-</div>{% endblock %}
+</div>
+
+{% endblock %}

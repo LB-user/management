@@ -16,7 +16,10 @@
 					<tr>
 						<th scope="col">Id</th>
 						<th scope="col">Nom de l'Entreprise</th>
-						<th scope="col">Numéro de contact de l'Entreprise</th>
+						<th scope="col">Nom du contact</th>
+						<th scope="col">Prénom du contact</th>
+						<th scope="col">Téléphone du contact</th>
+						<th scope="col">Email du contact</th>
 						<th scope="col">Actions</th>
 					</tr>
 				</thead>
@@ -27,7 +30,10 @@
 						<tr class="table-active">
 							<th scope="row">{{ company.id }}</th>
 							<td>{{ company.name }}</td>
-							<td>{{ company.contact }}</td>
+							<td>{{ company.lastname }}</td>
+							<td>{{ company.firstname }}</td>
+							<td>{{ company.phone }}</td>
+							<td>{{ company.email }}</td>
 							<td>
 								<a class="btn btn-secondary" href="{{ path("company_show", {"id": company.id}) }}">Plus d'informations</a>
 								<a class="btn btn-primary" href="{{ path("company_edit", {"id": company.id}) }}">Modifier</a>

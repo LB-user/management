@@ -9,11 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class SkillController extends AbstractController
 {
     /**
      * @Route("/skill", name="skill")
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function index(SkillRepository $skillRepository): Response
     {
@@ -27,7 +29,6 @@ class SkillController extends AbstractController
      */
     public function new(Request $request): Response
     {
-
             $skill = new Skill();
             $form = $this->createForm(SkillType::class, $skill);
             $form->handleRequest($request);
@@ -48,6 +49,7 @@ class SkillController extends AbstractController
 
     /**
      * @Route("skill/{id}", name="skill_show", methods={"GET"})
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function show(Skill $skill): Response
     {

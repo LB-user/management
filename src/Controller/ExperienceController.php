@@ -2,19 +2,30 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Entity\Experience;
 use App\Form\ExperienceType;
 use App\Repository\ExperienceRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class ExperienceController extends AbstractController
 {
 
+    protected $auth;
+
+    public function __construct(AuthorizationCheckerInterface $auth) {
+        $this->auth = $auth;
+    }
+    
     /**
      * @Route("/experience", name="experience")
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function index(ExperienceRepository $experienceRepository): Response
     {
@@ -26,14 +37,19 @@ class ExperienceController extends AbstractController
     /**
      * @Route("experience/new", name="experience_new", methods={"GET","POST"})
      */
-    public function new(Request $request): Response
+    public function new(Request $request, EntityManagerInterface $em): Response
     {
+        $id = $request->query->get('id');
+            $user = $em->getRepository(User::class)->findOneBy(['id' => $id]);
 
         $experience = new Experience();
         $form = $this->createForm(ExperienceType::class, $experience);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if(!$this->auth->isGranted('ROLE_SUPER_ADMIN')) {
+            $experience->setUser($user);
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($experience);
             $entityManager->flush();
@@ -49,6 +65,7 @@ class ExperienceController extends AbstractController
 
     /**
      * @Route("experience/{id}", name="experience_show", methods={"GET"})
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function show(Experience $experience): Response
     {

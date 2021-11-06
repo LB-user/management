@@ -48,7 +48,9 @@
 	<div class="container">
 		<div class="overflow-auto">
 			<h1>Gestion des Experiences</h1>
-
+			{% if is_granted("ROLE_ADMIN") %}
+				<a class="btn btn-primary" href="{{ path("experience_new") }}">Ajouter</a>
+			{% endif %}
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -66,13 +68,14 @@
 
 						<tr class="table-active">
 							<th scope="row">{{ experience.id }}</th>
-							<td>{{ experience.getUser().getLastname() }} {{ experience.getUser().getFirstname() }}</td>
+							<td>{{ experience.getUser().getLastname() }}
+								{{ experience.getUser().getFirstname() }}</td>
 							<td>{{ experience.getCompany().getName() }}</td>
 							<td>{{ experience.startAt|date('d/m/Y') }}</td>
 							<td>{{ experience.endAt|date('d/m/Y') }}</td>
 							<td>
 								<a class="btn btn-secondary" href="{{ path("experience_show", {"id": experience.id}) }}">Plus d'informations</a>
-									<a class="btn btn-primary" href="{{ path("experience_edit", {"id": experience.id}) }}">Modifier</a>
+								<a class="btn btn-primary" href="{{ path("experience_edit", {"id": experience.id}) }}">Modifier</a>
 							</td>
 						</tr>
 
@@ -80,9 +83,5 @@
 				</tbody>
 			</tbody>
 		</table>
-	{% if is_granted("ROLE_ADMIN") %}
-		<a class="btn btn-primary" href="{{ path("experience_new") }}">
-			<i class="fas fa-plus"></i>
-		</a>
-	{% endif %}
-</div></div>{% endblock %}
+	</div>
+</div>{% endblock %}

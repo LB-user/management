@@ -47,36 +47,33 @@
 	</div>
 	<div class="container">
 		<div class="overflow-auto">
-			<h1>Gestion des Compétences</h1>
-
+			<h1>Gestion des Documents</h1>
 			{% if is_granted("ROLE_ADMIN") %}
-				<a class="btn btn-primary" href="{{ path("skill_new") }}">Ajouter</a>
+				<a class="btn btn-primary" href="{{ path("document_new") }}">Ajouter</a>
 			{% endif %}
 			<table class="table table-hover">
 				<thead>
 					<tr>
 						<th scope="col">Id</th>
-						<th scope="col">Nom</th>
+						<th scope="col">Nom de la personne</th>
+						<th scope="col">Nom du fichier</th>
 						<th scope="col">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
-
-					{% for skill in skills %}
-
+					{% for document in documents %}
 						<tr class="table-active">
-							<th scope="row">{{ skill.id }}</th>
-							<td>{{ skill.name }}</td>
+							<td scope="row">{{ document.id }}</td>
+							<td>{{ document.getUser().getLastName() }}
+								{{ document.getUser().getFirstName() }}</td>
+							<td>{{ document.name }}</td>
 							<td>
-								<a class="btn btn-secondary" href="{{ path("skill_show", {"id": skill.id}) }}">Plus d'informations</a>
-								<a class="btn btn-primary" href="{{ path("skill_edit", {"id": skill.id}) }}">Modifier</a>
+								<a class="btn btn-primary" href="{{ document.attachement }}">Telecharger</a>
 							</td>
 						</tr>
-
 					{% endfor %}
 				</tbody>
 			</tbody>
 		</table>
-
 	</div>
 </div>{% endblock %}

@@ -85,11 +85,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $visibility;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Document::class, mappedBy="user")
+     */
+    private $document;
+
     public function __construct()
     {
         $this->childrens = new ArrayCollection();
         $this->userSkills = new ArrayCollection();
         $this->experience_id = new ArrayCollection();
+        $this->document = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -338,6 +344,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setvisibility(int $visibility): self
     {
         $this->visibility = $visibility;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Document[]
+     */
+    public function getDocument(): Collection
+    {
+        return $this->document;
+    }
+
+    public function addDocument(Document $document): self
+    {
+        if (!$this->document->contains($document)) {
+            $this->document[] = $document;
+            $document->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocument(Document $document): self
+    {
+        if ($this->document->removeElement($document)) {
+            // set the owning side to null (unless already changed)
+            if ($document->getUser() === $this) {
+                $document->setUser(null);
+            }
+        }
 
         return $this;
     }

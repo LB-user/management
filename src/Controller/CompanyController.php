@@ -9,11 +9,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class CompanyController extends AbstractController
 {
     /**
      * @Route("/company", name="company")
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function index(CompanyRepository $C): Response
     {
@@ -24,6 +26,7 @@ class CompanyController extends AbstractController
 
     /**
      * @Route("company/new", name="company_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function new(Request $request): Response
     {
@@ -48,6 +51,7 @@ class CompanyController extends AbstractController
 
     /**
      * @Route("company/{id}", name="company_show", methods={"GET"})
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function show(Company $company): Response
     {
@@ -58,6 +62,7 @@ class CompanyController extends AbstractController
 
     /**
      * @Route("company/{id}/edit", name="company_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function edit(Request $request, Company $company): Response
     {
@@ -79,6 +84,7 @@ class CompanyController extends AbstractController
 
     /**
      * @Route("company/{id}", name="company_delete", methods={"POST"})
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function delete(Request $request, Company $company): Response
     {

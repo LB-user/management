@@ -22,6 +22,7 @@ class UserController extends AbstractController
 {
     /**
      * @Route("/user", name="user")
+     * @IsGranted("ROLE_USER")
      */
     public function index(UserRepository $userRepository): Response
     {
@@ -69,6 +70,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="user_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_USER")
      */
     public function edit(Request $request, User $user): Response
     {
@@ -78,7 +80,7 @@ class UserController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $this->getDoctrine()->getManager()->flush();
 
-                return $this->redirectToRoute('user_show', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
             }
 
             return $this->renderForm('user/edit.html.twig', [
@@ -126,7 +128,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{id}", name="user_delete", methods={"POST"})
-     * @IsGranted("ROLE_USER")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function delete(Request $request, User $user): Response
     {
@@ -145,6 +147,7 @@ class UserController extends AbstractController
 
     /**
      * @Route("/{id}/cv", name="user_cv", methods={"GET"})
+     * @IsGranted("ROLE_USER")
      */
     public function pdfAction(Pdf $knpSnappyPdf, User $user)
     {
@@ -164,6 +167,9 @@ class UserController extends AbstractController
         );
     }
 
+    /**
+     * @IsGranted("ROLE_ADMIN")
+     */
     public function searchBar()
     {
         $form = $this->createFormBuilder(null)

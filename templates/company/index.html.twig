@@ -48,7 +48,9 @@
 	<div class="container">
 		<div class="overflow-auto">
 			<h1>Gestion des Entreprises</h1>
-
+			{% if is_granted("ROLE_ADMIN") %}
+				<a class="btn btn-primary" href="{{ path("company_new") }}">Ajouter</a>
+			{% endif %}
 			<table class="table table-hover">
 				<thead>
 					<tr>
@@ -70,7 +72,7 @@
 							<td>{{ company.contact }}</td>
 							<td>
 								<a class="btn btn-secondary" href="{{ path("company_show", {"id": company.id}) }}">Plus d'informations</a>
-									<a class="btn btn-primary" href="{{ path("company_edit", {"id": company.id}) }}">Modifier</a>
+								<a class="btn btn-primary" href="{{ path("company_edit", {"id": company.id}) }}">Modifier</a>
 							</td>
 						</tr>
 
@@ -78,9 +80,5 @@
 				</tbody>
 			</tbody>
 		</table>
-	{% if is_granted("ROLE_ADMIN") %}
-		<a class="btn btn-primary" href="{{ path("company_new") }}">
-			<i class="fas fa-plus"></i>
-		</a>
-	{% endif %}
-</div></div>{% endblock %}
+	</div>
+</div>{% endblock %}

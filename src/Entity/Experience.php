@@ -69,7 +69,7 @@ class Experience
         return $this->end_at;
     }
 
-    public function setEndAt(\DateTimeImmutable $end_at): self
+    public function setEndAt(?\DateTimeImmutable $end_at): self
     {
         $this->end_at = $end_at;
 

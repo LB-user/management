@@ -1,9 +1,9 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-{{ render (controller('App\\Controller\\SearchController::searchBar'))}}
 	{{ include('user/partials/_infos_user.html.twig') }}
 	{% if is_granted("ROLE_ADMIN") or is_granted("ROLE_SUPER_ADMIN")%}
+	{{ render (controller('App\\Controller\\SearchController::searchBar'))}}
 		<a class="btn btn-primary" href="{{ path("app_register") }}">Créer un nouveau profil +</a>
 	{% endif %}
 	{% if is_granted("ROLE_SUPER_ADMIN") %}
@@ -214,21 +214,34 @@
 							{% for user in users %}
 								{% if (user.parent == NULL) and (user.roles == ['ROLE_USER']) and (user.visibility == 1) %}
 									<div class="col">
-										<div class="card h-100">
-											<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
-											<div class="card-body">
-												<h5 class="card-title">{{ user.firstname }}
-													{{ user.lastname }}</h5>
-												{% for usercompany in user.getExperienceId() %}
-													{% if usercompany.endAt|date('dmY') == date()|date('dmY') %}
-														<p>Indisponible</p>
+											<div class="card h-100">
+												<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
+												<div class="card-body">
+													<div class="container">
+														{% for userskill in user.userSkills %}
+															{% if userskill.getLiked() %}
+																<span class="badge bg-primary">{{userskill.getSkillId().getName()}}</span>
+															{% else %}
+																<span class="badge bg-danger">{{userskill.getSkillId().getName()}}</span>
+															{% endif %}
+														{% endfor %}
+													</div>
+													<h5 class="card-title">{{ user.firstname }}
+														{{ user.lastname }}</h5>
+													{% for usercompany in user.getExperienceId() %}
+														{% if usercompany.endAt|date('dmY') == date()|date('dmY') %}
+															<p>Indisponible</p>
+														{% endif %}
+													{% endfor %}
+													<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
+													{% if is_granted("ROLE_SUPER_ADMIN") %}
+														<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>
+													{% else %}
+														<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": user.id}) }}">Modifier</a>
 													{% endif %}
-												{% endfor %}
-												<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
-												<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": user.id}) }}">Modifier</a>
+												</div>
 											</div>
 										</div>
-									</div>
 								{% endif %}
 							{% endfor %}
 						</div>

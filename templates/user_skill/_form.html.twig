@@ -1,9 +1,11 @@
 {{ form_start(form) }}
-        {{ form_row(form.user_id, {
+{% if is_granted("ROLE_SUPER_ADMIN") %}
+	{{ form_row(form.user_id, {
                 label: 'Nom de la personne'
         }) }}
+{% endif %}
         {{ form_row(form.skill_id, {
-                label: 'Nomde la compétence'
+                label: 'Nom de la compétence'
         }) }}
         {{ form_row(form.level, {
                 label: 'Niveau de la compétence'

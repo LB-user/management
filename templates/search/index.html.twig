@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block body %}
+{{ render (controller('App\\Controller\\SearchController::searchBar'))}}
 	{% if app.request.method == 'POST' %}
 		<div>
 			{% if users | length == 0 %}
@@ -30,6 +31,11 @@
 											<div class="card-body">
 												<h5 class="card-title">{{ user.firstname }}
 													{{ user.lastname }}</h5>
+												{% for usercompany in user.getExperienceId() %}
+													{% if usercompany.endAt|date('dmY') == date()|date('dmY') %}
+														<p>Indisponible</p>
+													{% endif %}
+												{% endfor %}
 												<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
 												{% if is_granted("ROLE_SUPER_ADMIN") %}
 													<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>

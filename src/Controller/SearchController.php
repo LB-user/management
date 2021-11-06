@@ -10,11 +10,13 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class SearchController extends AbstractController
 {
     /**
      * @Route("/search", name="search")
+     * @IsGranted("ROLE_ADMIN")
      */
     public function index(): Response
     {
@@ -58,6 +60,7 @@ class SearchController extends AbstractController
 
         /**
      * @Route("/handleSearch", name="handleSearch")
+     * @IsGranted("ROLE_ADMIN")
      * @param Request $request
      */
     public function handleSearch(Request $request, UserRepository $userRepository)

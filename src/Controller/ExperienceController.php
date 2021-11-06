@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use DateTimeImmutable;
 use App\Entity\Experience;
 use App\Form\ExperienceType;
 use App\Repository\ExperienceRepository;
@@ -10,9 +11,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class ExperienceController extends AbstractController
 {
@@ -50,6 +51,7 @@ class ExperienceController extends AbstractController
             if(!$this->auth->isGranted('ROLE_SUPER_ADMIN')) {
             $experience->setUser($user);
             }
+            $user->setChangedAt(new DateTimeImmutable());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($experience);
             $entityManager->flush();
@@ -78,12 +80,11 @@ class ExperienceController extends AbstractController
      * @Route("experience/{id}/edit", name="experience_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Experience $experience): Response
-    {
-
-        $form = $this->createForm(ExperienceType::class, $experience);
+    {$form = $this->createForm(ExperienceType::class, $experience);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->getUser()->setChangedAt(new DateTimeImmutable());
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);

@@ -5,6 +5,7 @@ namespace App\Controller;
 use Knp\Snappy\Pdf;
 use App\Entity\User;
 use App\Form\UserType;
+use DateTimeImmutable;
 use App\Form\UserAdminType;
 use App\Form\UserPasswordType;
 use App\Form\UserHierarchyType;
@@ -46,6 +47,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->getUser()->setChangedAt(new DateTimeImmutable());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -76,19 +78,20 @@ class UserController extends AbstractController
      */
     public function edit(Request $request, User $user): Response
     {
-            $form = $this->createForm(UserType::class, $user);
-            $form->handleRequest($request);
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
 
-            if ($form->isSubmitted() && $form->isValid()) {
-                $this->getDoctrine()->getManager()->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setChangedAt(new DateTimeImmutable());
+            $this->getDoctrine()->getManager()->flush();
 
-                return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
-            }
+            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+        }
 
-            return $this->renderForm('user/edit.html.twig', [
-                'user' => $user,
-                'form' => $form,
-            ]);
+        return $this->renderForm('user/edit.html.twig', [
+            'user' => $user,
+            'form' => $form,
+        ]);
     }
 
     /**
@@ -97,11 +100,13 @@ class UserController extends AbstractController
      */
     public function editTeam(Request $request, User $user): Response
     {
+        $user = $this->getUser();
 
         $form = $this->createForm(UserHierarchyType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setChangedAt(new DateTimeImmutable());
             $this->getDoctrine()->getManager()->flush();
         }
         return $this->renderForm('user/edit_team.html.twig', [
@@ -120,6 +125,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setChangedAt(new DateTimeImmutable());
             $this->getDoctrine()->getManager()->flush();
         }
         return $this->renderForm('user/edit_admin.html.twig', [
@@ -138,12 +144,13 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user->setChangedAt(new DateTimeImmutable());
             $user->setPassword(
                 $userPasswordHasherInterface->hashPassword(
-                        $user,
-                        $form->get('password')->getData()
-                    )
-                );
+                    $user,
+                    $form->get('password')->getData()
+                )
+            );
 
             $this->getDoctrine()->getManager()->flush();
 
@@ -152,7 +159,7 @@ class UserController extends AbstractController
         return $this->renderForm('user/edit_password.html.twig', [
             'user' => $user,
             'form' => $form,
-            
+
         ]);
     }
 
@@ -190,6 +197,8 @@ class UserController extends AbstractController
             'title'  => 'Cv',
             'user' => $user,
         ));
+
+        $this->getUser()->setChangedAt(new DateTimeImmutable());
 
         return new PdfResponse(
             $knpSnappyPdf->getOutputFromHtml($html),

@@ -90,6 +90,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $address;
 
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
+    private $changedAt;
+
     public function __construct()
     {
         $this->childrens = new ArrayCollection();
@@ -384,6 +389,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getChangedAt(): ?\DateTimeImmutable
+    {
+        return $this->changedAt;
+    }
+
+    public function setChangedAt(\DateTimeImmutable $changedAt): self
+    {
+        $this->changedAt = $changedAt;
 
         return $this;
     }

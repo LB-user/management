@@ -6,6 +6,7 @@ use Knp\Snappy\Pdf;
 use App\Entity\User;
 use App\Form\UserType;
 use App\Form\UserAdminType;
+use App\Form\UserPasswordType;
 use App\Form\UserHierarchyType;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserController extends AbstractController
 {
@@ -123,6 +125,34 @@ class UserController extends AbstractController
         return $this->renderForm('user/edit_admin.html.twig', [
             'user' => $user,
             'form' => $form,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/edit_password", name="user_edit_password", methods={"GET","POST"})
+     * @IsGranted("ROLE_USER")
+     */
+    public function editPassword(Request $request, User $user, UserPasswordHasherInterface $userPasswordHasherInterface): Response
+    {
+        $form = $this->createForm(UserPasswordType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $userPasswordHasherInterface->hashPassword(
+                        $user,
+                        $form->get('password')->getData()
+                    )
+                );
+
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);
+        }
+        return $this->renderForm('user/edit_password.html.twig', [
+            'user' => $user,
+            'form' => $form,
+            
         ]);
     }
 

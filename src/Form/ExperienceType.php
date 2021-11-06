@@ -72,7 +72,7 @@ class ExperienceType extends AbstractType
                     return $er->createQueryBuilder('u')                 
                     ->orderBy('u.name', 'ASC');
                 }
-        ])
+            ])
             ->add('start_at', DateTimeType::class, array(
                 'input' => 'datetime_immutable',
                 'date_widget' =>'single_text',

@@ -39,9 +39,15 @@ class Company
      */
     private $experience;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Address::class, mappedBy="company")
+     */
+    private $addresses;
+
     public function __construct()
     {
         $this->experience = new ArrayCollection();
+        $this->addresses = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,6 +115,36 @@ class Company
             // set the owning side to null (unless already changed)
             if ($experience->getCompany() === $this) {
                 $experience->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Address[]
+     */
+    public function getAddresses(): Collection
+    {
+        return $this->addresses;
+    }
+
+    public function addAddress(Address $address): self
+    {
+        if (!$this->addresses->contains($address)) {
+            $this->addresses[] = $address;
+            $address->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAddress(Address $address): self
+    {
+        if ($this->addresses->removeElement($address)) {
+            // set the owning side to null (unless already changed)
+            if ($address->getCompany() === $this) {
+                $address->setCompany(null);
             }
         }
 

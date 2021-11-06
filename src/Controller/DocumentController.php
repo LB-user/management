@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use DateTimeImmutable;
 use App\Entity\Document;
 use App\Form\DocumentType;
 use App\Repository\DocumentRepository;
@@ -10,9 +11,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 class DocumentController extends AbstractController
 {
@@ -50,6 +51,7 @@ class DocumentController extends AbstractController
             if(!$this->auth->isGranted('ROLE_SUPER_ADMIN')) {
             $document->setUser($user);
             }
+            $user->setChangedAt(new DateTimeImmutable());
             $file = $document->getName();
             $fileName = date("Y_m_d_hms", time()). "_" . $file . "_" . $user->getLastName()."_".$user->getFirstName(). ".".$form->get('attachement')->getData()->guessExtension() ;
             $dataFile = $form['attachement']->getData();
@@ -92,6 +94,7 @@ class DocumentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->getUser()->setChangedAt(new DateTimeImmutable());
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);

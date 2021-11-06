@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use DateTimeImmutable;
 use App\Entity\Address;
 use App\Form\AddressType;
 use App\Form\AddressCompanyType;
@@ -18,11 +19,14 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class AddressController extends AbstractController
 {
 
+    private EntityManagerInterface $em;
+
     protected $auth;
 
-    public function __construct(AuthorizationCheckerInterface $auth)
+    public function __construct(AuthorizationCheckerInterface $auth, EntityManagerInterface $em)
     {
         $this->auth = $auth;
+        $this->em = $em;
     }
 
     /**
@@ -76,6 +80,7 @@ class AddressController extends AbstractController
             if (!$this->auth->isGranted('ROLE_SUPER_ADMIN')) {
                 $address->setUser($user);
             }
+            $user->setChangedAt(new DateTimeImmutable());
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($address);
             $entityManager->flush();
@@ -105,7 +110,6 @@ class AddressController extends AbstractController
      */
     public function editCompany(Request $request, Address $address): Response
     {
-
         $form = $this->createForm(AddressType::class, $address);
         $form->handleRequest($request);
 
@@ -124,13 +128,13 @@ class AddressController extends AbstractController
         /**
      * @Route("address/{id}/edit_user", name="address_edit_user", methods={"GET","POST"})
      */
-    public function editUser(Request $request, Address $address): Response
+    public function editUser(Request $request, Address $address, DateTimeImmutable $date): Response
     {
-
         $form = $this->createForm(AddressType::class, $address);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->getUser()->setChangedAt($date);
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('user', [], Response::HTTP_SEE_OTHER);

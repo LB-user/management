@@ -25,7 +25,7 @@ class DocumentController extends AbstractController
     
     /**
      * @Route("/document", name="document")
-     * @IsGranted("ROLE_SUPER_ADMIN, message="Va chier"")
+     * @IsGranted("ROLE_SUPER_ADMIN")
      */
     public function index(DocumentRepository $documentRepository): Response
     {

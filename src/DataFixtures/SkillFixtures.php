@@ -16,8 +16,18 @@ class SkillFixtures extends Fixture
         ['Laravel'],
         ['Java'],
         ['Python'],
+        ['Ruby'],
+        ['C'],
         ['C#'],
-        ['CSS']
+        ['C++'],
+        ['CSS'],
+        ['Objective-C'],
+        ['Django'],
+        ['Angular'],
+        ['ASP.net'],
+        ['Meteor'],
+        ['Express'],
+        ['Spring']
     ];
 
     public function load(ObjectManager $manager)

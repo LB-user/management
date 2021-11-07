@@ -167,8 +167,7 @@
 					<div class="card-body overflow-auto">
 						<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
 							<h2>Collaborateurs</h2>
-							{% for user in users %}
-								{% for child in user.childrens %}
+								{% for child in app.user.childrens %}
 									{% if (app.user.id != child.id) and child.visibility == 1 %}
 										<div class="col">
 											<div class="card h-100">
@@ -201,7 +200,6 @@
 										</div>
 									{% endif %}
 								{% endfor %}
-							{% endfor %}
 						</div>
 					</div>
 				</div>

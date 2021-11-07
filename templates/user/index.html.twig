@@ -3,7 +3,9 @@
 {% block body %}
 	{{ include('user/partials/_infos_user.html.twig') }}
 	{% if is_granted("ROLE_ADMIN") or is_granted("ROLE_SUPER_ADMIN")%}
+	<div class="container my-2">
 	{{ render (controller('App\\Controller\\SearchController::searchBar'))}}
+	</div>
 		<a class="btn btn-primary" href="{{ path("app_register") }}">Créer un nouveau profil +</a>
 	{% endif %}
 	{% if is_granted("ROLE_SUPER_ADMIN") %}

@@ -15,61 +15,68 @@
 						{{ user.email }}</strong>
 				</li>
 				<li>
-					<strong>Adresse: <br>
+					<strong>Adresse:
+						<br>
 						{{ user.getAddress().getNbRoad() }}
 						{{ user.getAddress().getRoad() }}<br>
 						{{ user.getAddress().getCp() }}
 						{{ user.getAddress().getCity() }}<br>
-						{{ user.getAddress().getCountry() }}</strong>
+						{{ user.getAddress().getCountry() }}
+					</strong>
 				</li>
 			</ul>
 		</div>
 	</div>
 </header>
-<section class="container">
-	<h3>EXPÉRIENCES</h3>
-	<ul style="list-style-type: none">
-		{% for userexperience in user.getExperienceId() %}
-			<li class="list-group-item">
-				<h5>{{userexperience.getCompany().getName()}}</h5>
-				<p>{{ userexperience.getCompany().getAddress().getNbRoad() }}
-					{{ userexperience.getCompany().getAddress().getRoad() }}<br>
-					{{ userexperience.getCompany().getAddress().getCp() }}
-					{{ userexperience.getCompany().getAddress().getCity() }}<br>
-					{{ userexperience.getCompany().getAddress().getCountry() }}<br>
-				</p>
-			</li>
-			{{ userexperience.startAt|date('d/m/Y') }}-{{ userexperience.endAt|date('d/m/Y') }}
-		</h5>
-		<p>
-			{{userexperience.details}}
-		</p>
-	{% endfor %}
-</ul>
-<section class="autresComp">
-	<header class="enTete">
-		<div class="txtEnTete">
-			<div class="plTitre3">
-				<h3>COMPÉTENCES</h3>
-			</div>
-		</div>
-	</header>
-	<article class="infosAutresComp">
-		<div class="prgsInformatiques">
-			<ul style="list-style-type: none;">
-				{% for userskill in user.userSkills %}
-					<li>
-						<h4>{{userskill.getSkillId().getName()}}</h4>
-						<p>Niveau :
-							{{userskill.getLevel()}}</p>
-						{% if userskill.getLiked() %}
-							<p class="card-text">Aime</p>
-						{% else %}
-							<p class="card-text">N'aime pas</p>
-						{% endif %}
+<body>
+	{% if (user.parent != NULL) or (is_granted("ROLE_SUPER_ADMIN")) or (is_granted("ROLE_ADMIN"))%}
+		<section class="container">
+			<h3>EXPÉRIENCES</h3>
+			<ul style="list-style-type: none">
+				{% for userexperience in user.getExperienceId() %}
+					<li class="list-group-item">
+						<h5>{{userexperience.getCompany().getName()}}</h5>
+						<p>{{ userexperience.getCompany().getAddress().getNbRoad() }}
+							{{ userexperience.getCompany().getAddress().getRoad() }}<br>
+							{{ userexperience.getCompany().getAddress().getCp() }}
+							{{ userexperience.getCompany().getAddress().getCity() }}<br>
+							{{ userexperience.getCompany().getAddress().getCountry() }}<br>
+						</p>
 					</li>
-				{% endfor %}
-			</ul>
-		</div>
-	</article>
-</section></section></body></html>
+					{{ userexperience.startAt|date('d/m/Y') }}-{{ userexperience.endAt|date('d/m/Y') }}
+				</h5>
+				<p>
+					{{userexperience.details}}
+				</p>
+			{% endfor %}
+		</ul>
+	</section>
+	{% endif %}
+	<section class="autresComp">
+		<header class="enTete">
+			<div class="txtEnTete">
+				<div class="plTitre3">
+					<h3>COMPÉTENCES</h3>
+				</div>
+			</div>
+		</header>
+		<article class="infosAutresComp">
+			<div class="prgsInformatiques">
+				<ul style="list-style-type: none;">
+					{% for userskill in user.userSkills %}
+						<li>
+							<h4>{{userskill.getSkillId().getName()}}</h4>
+							<p>Niveau :
+								{{userskill.getLevel()}}</p>
+							{% if userskill.getLiked() %}
+								<p class="card-text">Aime</p>
+							{% else %}
+								<p class="card-text">N'aime pas</p>
+							{% endif %}
+						</li>
+					{% endfor %}
+				</ul>
+			</div>
+		</article>
+	</section>
+</body>

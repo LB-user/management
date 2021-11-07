@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<div class="container">
+		<h1>Adresse</h1>
+		<table class="table">
+			<tbody>
+				<tr>
+					<th>Numéro de la rue</th>
+					<td>{{ address.getNbRoad() }}</td>
+				</tr>
+				<tr>
+					<th>Nom de la rue</th>'
+					<td>{{ address.road }}</td>
+				</tr>
+				<tr>
+					<th>Nom de la ville</th>
+					<td>{{ address.city }}</td>
+				</tr>
+				<tr>
+					<th>Code postal</th>
+					<td>{{ address.cp }}</td>
+				</tr>
+				<tr>
+					<th>Pays</th>
+					<td>{{ address.country }}</td>
+				</tr>
+				<tr>
+					<th>Entreprise</th>
+					<td>{{ address.getCompany().getName() }}</td>
+				</tr>
+			</tbody>
+		</table>
+		<a class="btn btn-primary" href="{{ path('address_edit', {"id": address.id}) }}">Modifier l'adresse</a>
+		{{ include('address/_delete_form.html.twig') }}
+		<a href="{{ path('address') }}">Retour à la liste</a>
+	</div>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Gestion
+{% endblock %}
+
+{% block body %}
+	{{ include('user/partials/_infos_user.html.twig') }}
+	<div class="container">
+		<div class="overflow-auto">
+			<h1>Gestion des Experiences</h1>
+			{% if is_granted("ROLE_ADMIN") %}
+				<a class="btn btn-primary" href="{{ path("experience_new") }}">Ajouter</a>
+			{% endif %}
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">Nom de la personne</th>
+						<th scope="col">Entreprise</th>
+						<th scope="col">Poste</th>
+						<th scope="col">Date de début</th>
+						<th scope="col">Date de fin</th>
+						<th scope="col">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					{% for experience in experiences %}
+
+						<tr class="table-active">
+							<th scope="row">{{ experience.id }}</th>
+							<td>{{ experience.getUser().getLastname() }}
+								{{ experience.getUser().getFirstname() }}</td>
+							<td>{{ experience.getCompany().getName() }}</td>
+							<td>{{ experience.job }}</td>
+							<td>{{ experience.startAt|date('d/m/Y') }}</td>
+							<td>{{ experience.endAt|date('d/m/Y') }}</td>
+							<td>
+								<a class="btn btn-secondary" href="{{ path("experience_show", {"id": experience.id}) }}">Plus d'informations</a>
+								<a class="btn btn-primary" href="{{ path("experience_edit", {"id": experience.id}) }}">Modifier</a>
+							</td>
+						</tr>
+
+					{% endfor %}
+				</tbody>
+			</tbody>
+		</table>
+	</div>
+</div>{% endblock %}

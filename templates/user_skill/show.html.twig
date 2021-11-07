@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+	<div class="container">
+		<h1>Attribution de la compétence</h1>
+		<table class="table">
+			<tbody>
+				<tr>
+					<th>Nom</th>
+					<td>{{ user_skill.getSkillId().getName() }}</td>
+				</tr>
+                <tr>
+					<th>Niveau</th>
+					<td>{{ user_skill.level }}</td>
+				</tr>
+                <tr>
+					<th>Appréciation</th>
+					<td>{{ user_skill.liked }}</td>
+				</tr>
+			</tbody>
+		</table>
+		<a href="{{ path('user') }}">Retour à la liste</a>
+	</div>
+
+
+{% endblock %}

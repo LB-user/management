@@ -1,0 +1,55 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Gestion
+{% endblock %}
+
+{% block body %}
+	{{ include('user/partials/_infos_user.html.twig') }}
+	<div class="container">
+		<div class="overflow-auto">
+			<h1>Gestion des Adresses</h1>
+			{% if is_granted("ROLE_ADMIN") %}
+				<a class="btn btn-primary" href="{{ path("address_new_company") }}">Ajouter une adresse d'entreprise</a>
+				<a class="btn btn-primary" href="{{ path("address_new_user") }}">Ajouter une adresse d'utilisateur</a>
+			{% endif %}
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">Numéro de la rue</th>
+						<th scope="col">Nom de la rue</th>
+						<th scope="col">Nom de la ville</th>
+						<th scope="col">Code Postal</th>
+						<th scope="col">Pays</th>
+						<th scope="col">Propriétaire</th>
+						<th scope="col">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					{% for address in addresses %}
+
+						<tr class="table-active">
+							<th scope="row">{{ address.id }}</th>
+							<td>{{ address.getNbRoad() }}</td>
+							<td>{{ address.road }}</td>
+							<td>{{ address.city }}</td>
+							<td>{{ address.cp }}</td>
+							<td>{{ address.country }}</td>
+							{% if address.getCompany() %}
+							<td>{{ address.getCompany().getName() }}</td>
+							{% elseif address.getUser()%}
+							<td>{{ address.getUser().getLastname() }}</td>
+							{% endif %}
+							<td>
+								<a class="btn btn-secondary" href="{{ path("address_show", {"id": address.id}) }}">Plus d'informations</a>
+								<a class="btn btn-primary" href="{{ path("address_edit_company", {"id": address.id}) }}">Modifier</a>
+							</td>
+						</tr>
+
+					{% endfor %}
+				</tbody>
+			</tbody>
+		</table>
+	</div>
+</div>{% endblock %}

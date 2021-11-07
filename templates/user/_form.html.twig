@@ -1,4 +1,20 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    {{ form_row(form.email, {
+        label: 'Adresse E-mail'
+    }) }}
+    {{ form_row(form.lastname, {
+        label: 'Nom'
+    }) }}
+	{{ form_row(form.firstname, {
+        label: 'Prénom'
+    }) }}
+	{{ form_row(form.phone, {
+        label: 'Numéro de téléphone'
+    }) }}
+    {{ form_row(form.visibility, {
+        label: 'Visibilité du profil :'
+    }) }}
+        {{ form_row(form.register, {
+                label: 'Modifier'
+        }) }}
 {{ form_end(form) }}

@@ -1,0 +1,16 @@
+{{ form_start(form) }}
+ {% if is_granted("ROLE_SUPER_ADMIN") %}
+	{{ form_row(form.user, {
+                label: 'Nom de la personne'
+        }) }}
+{% endif %}
+        {{ form_row(form.name, {
+                label: 'Nom du fichier'
+        }) }}
+        {{ form_row(form.attachement, {
+                label: 'Choix du fichier'
+        }) }}
+        {{ form_row(form.register, {
+                label: 'Modifier'
+        }) }}
+{{ form_end(form) }}

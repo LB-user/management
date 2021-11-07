@@ -1,26 +1,204 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}user{% endblock %}
-
 {% block body %}
-    <h1>user</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ user.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ user.firstname }} {{ user.lastname }}</td>
-            </tr>
-        </tbody>
-    </table>
+	<div class="container">
+		<h1>Utilisateur</h1>
+		<a class="btn btn-primary" href="{{ path('user_cv', {"id": user.id}) }}">Telecharger le CV
+		</a>
+		<table class="table">
+			<tbody>
+				<tr>
+					<th>Nom</th>
+					<td>{{ user.firstname }}
+						{{ user.lastname }}</td>
+				</tr>
+				<tr>
+					<th>Status</th>
+					<td>
+						{% if 'ROLE_SUPER_ADMIN' in user.roles %}
+							Administrateur
+						{% elseif "ROLE_ADMIN" in user.roles %}
+							Commercial
+						{% elseif "ROLE_USER" in user.roles and user.parent %}
+							Collaborateur
+						{% else %}
+							Candidat
+						{% endif %}
+					</td>
+				</tr>
+				{% if user.parent %}
+					<tr>
+						<th>Commercial en charge</th>
+						<td>{{ user.getParent().getLastName() }}
+							{{ user.getParent().getFirstName() }}</td>
+					</tr>
+				{% endif %}
+				<tr>
+					<th>Email</th>
+					<td>{{ user.email }}</td>
+				</tr>
+				<tr>
+					<th>Numéro de téléphone</th>
+					<td>{{ user.phone }}</td>
+				</tr>
 
-    <a href="{{ path('user') }}">back to list</a>
-
-    <a href="{{ path('user_edit', {'id': user.id}) }}">edit</a>
-
-    {{ include('user/_delete_form.html.twig') }}
-{% endblock %}
+				<tr>
+					<th>Adresse</th>
+					<td>
+						{% if user.getAddress() %}
+							{{ user.getAddress().getNbRoad() }}
+							{{ user.getAddress().getRoad() }}<br>
+							{{ user.getAddress().getCp() }}
+							{{ user.getAddress().getCity() }}<br>
+							{{ user.getAddress().getCountry() }}<br>
+							<a href="{{ path("address_edit_user", {"id": user.getAddress().id}) }}" class="card-link">Modifier adresse</a>
+						{% else %}
+							<a href="{{ path("address_new_user", {"id": user.id}) }}" class="card-link">Ajouter adresse</a>
+						{% endif %}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<table class="table">
+			<tbody>
+				<tr>
+					<div class="accordion" id="accordionPanelsStayOpenExample">
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="panelsStayOpen-headingOne">
+								<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+									Les compétences
+								</button>
+							</h2>
+							<div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+								<div class="accordion-body">
+									<div class="row row-cols-1 row-cols-md-4 g-4">
+										{% for userskill in user.userSkills %}
+											<div class="card" style="width: 18rem;">
+												<div class="card-body">
+													<h5 class="card-title">{{userskill.getSkillId().getName()}}</h5>
+													<h6 class="card-subtitle mb-2 text-muted">{{userskill.getLevel()}}</h6>
+													{% if userskill.getLiked() %}
+														<p class="card-text">Aime</p>
+													{% else %}
+														<p class="card-text">N'aime pas</p>
+													{% endif %}
+													<a href="{{ path("user_skill_edit", {"id": userskill.id}) }}" class="card-link">Modifier</a>
+												</div>
+											</div>
+										{% endfor %}
+										<a href="{{ path("user_skill_new", {"id": user.id}) }}" class="card-link">Ajouter une compétence</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+									Voir les expériences
+								</button>
+							</h2>
+							<div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+								<div class="accordion-body">
+									<div class="row row-cols-1 row-cols-md-4 g-4">
+										{% for userexperience in user.getExperienceId() %}
+											<div class="card">
+												<div class="card-body">
+													<h5 class="card-title">{{userexperience.getCompany().getName() }}</h5>
+													<h6 class="card-subtitle mb-2 text-muted">{{ userexperience.job }}<br/>{{ userexperience.startAt|date('d/m/Y') }}-{{ userexperience.endAt|date('d/m/Y') }}</h6>
+													<p>{{userexperience.details|length > 50 ? userexperience.details|slice(0, 50) ~ '[...]' : userexperience.details}}</p>
+													<a href="{{ path("experience_edit", {"id": userexperience.id}) }}" class="card-link">Modifier</a>
+												</div>
+											</div>
+										{% endfor %}
+										<a href="{{ path("experience_new", {"id": user.id}) }}" class="card-link">Ajouter une experience</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="panelsStayOpen-headingThree">
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
+									Voir les documents
+								</button>
+							</h2>
+							<div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+								<div class="accordion-body">
+									<div class="row row-cols-1 row-cols-md-4 g-4">
+										{% for userdocument in user.getdocument() %}
+											<div class="card">
+												<div class="card-body">
+													<h5 class="card-title">{{userdocument.getName() }}</h5>
+													<a class="btn btn-primary" href="{{ userdocument.getAttachement() }}">Telecharger le document</a>
+													<a href="{{ path("document_edit", {"id": userdocument.id}) }}" class="card-link">Modifier</a>
+													<form method="post" action="{{ path('document_delete', {'id': userdocument.id}) }}" onsubmit="Êtes-Vous sûr de vouloir supprimer cet élément?');">
+														<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ userdocument.id) }}">
+														<button class="btn btn-danger">Supprimer</button>
+													</form>
+												</div>
+											</div>
+										{% endfor %}
+										<a href="{{ path("document_new", {"id": user.id}) }}" class="card-link">Ajouter un document</a>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% if (user.parent != NULL) or (app.user.id == user.id) %}
+							<div class="accordion-item">
+								<h2 class="accordion-header" id="panelsStayOpen-headingFour">
+									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour">
+										Voir l'entreprise actuelle
+									</button>
+								</h2>
+								<div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour">
+									<div class="accordion-body">
+										{% for usercompany in user.getExperienceId() %}
+											{% if usercompany.endAt|date('dmY') == date()|date('dmY') %}
+												<div class="card text-center">
+													<div class="card-header">
+													Nom de l'entreprise : <br>
+														{{ usercompany.getCompany().getName() }}
+													</div>
+													<div class="card-body">
+														<p class="card-text">
+														Adresse : <br>
+															{{ usercompany.getCompany().getAddress().getNbRoad() }}
+															{{ usercompany.getCompany().getAddress().getRoad() }}<br>
+															{{ usercompany.getCompany().getAddress().getCp() }}
+															{{ usercompany.getCompany().getAddress().getCity() }}<br>
+															{{ usercompany.getCompany().getAddress().getCountry() }}</p>
+														<p class="card-text">
+														Contact : <br>
+														{{ usercompany.getCompany().getLastName() }} {{ usercompany.getCompany().getFirstName() }} <br>
+														{% if usercompany.getCompany().getPhone() %}
+														Numéro de téléphone : 
+														{{ usercompany.getCompany().getPhone() }}<br>
+														{% endif %}
+														{% if usercompany.getCompany().getEmail() %}
+														Email : 
+														{{ usercompany.getCompany().getEmail() }}<br>
+														{% endif %}
+														</p>
+													</div>
+												</div>
+											{% endif %}
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+				</tr>
+			</tbody>
+		</tr>
+	</tbody>
+</table>
+{% if is_granted("ROLE_USER") %}
+	<a class="btn btn-primary" href="{{ path('user_edit', {"id": user.id}) }}">Modifier les informations du profil</a>
+{% elseif is_granted("ROLE_ADMIN") %}
+	<a class="btn btn-primary" href="{{ path('edit-team', {"id": user.id}) }}">Modifier les informations du profil</a>
+{% elseif is_granted("ROLE_SUPER_ADMIN") %}
+	<a class="btn btn-primary" href="{{ path('edit_admin', {"id": user.id}) }}">Modifier les informations du profil</a>
+{% endif %}
+{{ include('user/_delete_form.html.twig') }}
+<a href="{{ path('user') }}">Retour à la liste</a></div>{% endblock %}

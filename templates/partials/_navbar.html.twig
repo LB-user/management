@@ -1,0 +1,42 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="{{ path('user')}}">App Manager</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarColor01">
+			<ul class="navbar-nav me-auto">
+				{% if is_granted("ROLE_ADMIN")  %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('user')}}">Dashboard</a>
+					</li>
+				{% endif %}
+				{% if is_granted("ROLE_SUPER_ADMIN")  %}
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('user_skill')}}">Attribution des compétences</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('skill')}}">Compétences</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('experience')}}">Experiences</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('company')}}">Entreprises</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('document')}}">Documents</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ path('address')}}">Adresses</a>
+					</li>
+				{% endif %}
+			</ul>
+			<div class="d-flex">
+				<a href="{{ path('user_edit_password', {'id': app.user.id}) }}" class="btn btn-secondary me-sm-2" type="text" placeholder="Search">Changer mot de passe</a>
+				<a href="{{ path('app_logout') }}" class="btn btn-danger me-sm-2" type="text" placeholder="Search">Se déconnecter</a>
+			</div>
+		</div>
+	</div>
+</nav>
+{% if is_granted("ROLE_ADMIN")  %}{% endif %}

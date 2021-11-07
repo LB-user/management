@@ -1,17 +1,46 @@
-{% extends 'base.html.twig' %}
+{% extends 'baselog.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Register
+{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+<h1>Register</h1>
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
+<section class="vh-100">
+	<div class="container-fluid h-custom">
+		<div class="row d-flex justify-content-center align-items-center h-100">
+			<div class="col-md-9 col-lg-6 col-xl-5">
+				<img src="https://mdbootstrap.com/img/Photos/new-templates/bootstrap-login-form/draw2.png" class="img-fluid" alt="Sample image">
+			</div>
+			<div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
+				{{ form_start(registrationForm) }}
+				{{ form_row(registrationForm.lastname, {
+            label: 'Votre Nom'
+        }) }}
+				{{ form_row(registrationForm.firstname, {
+            label: 'Votre Prénom'
+        }) }}
+				{{ form_row(registrationForm.phone, {
+            label: 'Votre numéro de téléphone'
+        }) }}
+				{{ form_row(registrationForm.email) }}
+				{{ form_row(registrationForm.password, {
             label: 'Password'
         }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+				{{ form_row(registrationForm.register, {
+            label: 'S\'enregistrer'
+        }) }}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+				{{ form_end(registrationForm) }}
+					<p class="small fw-bold mt-2 pt-1 mb-0">Vous avez déjà compte?
+								<a href="{{ path('app_login') }}" class="link-danger">Se connecter</a>
+							</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<form method="post">
+		<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+		<a href="{{ path('user_new') }}"></a>
+	</form>
 {% endblock %}

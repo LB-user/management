@@ -1,0 +1,25 @@
+{{ form_start(form) }}
+        {% if is_granted("ROLE_SUPER_ADMIN") %}
+	{{ form_row(form.user, {
+                label: 'Nom de la personne'
+        }) }}
+{% endif %}
+        {{ form_row(form.company, {
+                label: 'Nom de l\'entreprise'
+        }) }}
+        {{ form_row(form.job, {
+                label: 'Poste dans l\'entreprise'
+        }) }}
+        {{ form_row(form.start_at, {
+                label: 'Date de début'
+        }) }}
+        {{ form_row(form.end_at, {
+                label: 'Date de fin'
+        }) }}
+        {{ form_row(form.details, {
+                label: 'Détails'
+        }) }}
+        {{ form_row(form.register, {
+                label: 'Modifier'
+        }) }}
+{{ form_end(form) }}

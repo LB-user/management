@@ -51,18 +51,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $lastname;
 
     /**
-     * @ORM\Column(type="text")
-     */
-    private $address;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $phone;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="childrens")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $parent;
 
@@ -71,9 +65,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $childrens;
 
+    /**
+     * @ORM\OneToMany(targetEntity=UserSkill::class, mappedBy="user_id")
+     */
+    private $userSkills;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Experience::class, mappedBy="user")
+     */
+    private $experience_id;
+
+    /**
+     * @ORM\Column(type="smallint")
+     */
+    private $visibility;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Document::class, mappedBy="user")
+     */
+    private $document;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Address::class, mappedBy="user", cascade={"persist", "remove"})
+     */
+    private $address;
+
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     */
+    private $changedAt;
+
     public function __construct()
     {
         $this->childrens = new ArrayCollection();
+        $this->userSkills = new ArrayCollection();
+        $this->experience_id = new ArrayCollection();
+        $this->document = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -189,18 +216,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAddress(): ?string
-    {
-        return $this->address;
-    }
-
-    public function setAddress(string $address): self
-    {
-        $this->address = $address;
-
-        return $this;
-    }
-
     public function getPhone(): ?string
     {
         return $this->phone;
@@ -251,6 +266,141 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $children->setParent(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserSkill[]
+     */
+    public function getUserSkills(): Collection
+    {
+        return $this->userSkills;
+    }
+
+    public function addUserSkill(UserSkill $userSkill): self
+    {
+        if (!$this->userSkills->contains($userSkill)) {
+            $this->userSkills[] = $userSkill;
+            $userSkill->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserSkill(UserSkill $userSkill): self
+    {
+        if ($this->userSkills->removeElement($userSkill)) {
+            // set the owning side to null (unless already changed)
+            if ($userSkill->getUserId() === $this) {
+                $userSkill->setUserId(null);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection|Experience[]
+     */
+    public function getExperienceId(): Collection
+    {
+        return $this->experience_id;
+    }
+
+    public function addExperienceId(Experience $experienceId): self
+    {
+        if (!$this->experience_id->contains($experienceId)) {
+            $this->experience_id[] = $experienceId;
+            $experienceId->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExperienceId(Experience $experienceId): self
+    {
+        if ($this->experience_id->removeElement($experienceId)) {
+            // set the owning side to null (unless already changed)
+            if ($experienceId->getUser() === $this) {
+                $experienceId->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getvisibility(): ?int
+    {
+        return $this->visibility;
+    }
+
+    public function setvisibility(int $visibility): self
+    {
+        $this->visibility = $visibility;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Document[]
+     */
+    public function getDocument(): Collection
+    {
+        return $this->document;
+    }
+
+    public function addDocument(Document $document): self
+    {
+        if (!$this->document->contains($document)) {
+            $this->document[] = $document;
+            $document->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDocument(Document $document): self
+    {
+        if ($this->document->removeElement($document)) {
+            // set the owning side to null (unless already changed)
+            if ($document->getUser() === $this) {
+                $document->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(?Address $address): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($address === null && $this->address !== null) {
+            $this->address->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($address !== null && $address->getUser() !== $this) {
+            $address->setUser($this);
+        }
+
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getChangedAt(): ?\DateTimeImmutable
+    {
+        return $this->changedAt;
+    }
+
+    public function setChangedAt(\DateTimeImmutable $changedAt): self
+    {
+        $this->changedAt = $changedAt;
 
         return $this;
     }

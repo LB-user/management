@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SearchController!
+{% endblock %}
+
+{% block body %}
+{{ include('user/partials/_infos_user.html.twig') }}
+{{ render (controller('App\\Controller\\SearchController::searchBar'))}}
+	{% if app.request.method == 'POST' %}
+		<div>
+			{% if users | length == 0 %}
+				<h4>Aucun résulat pour votre recherche.</h4>
+			{% else %}
+				<h3 class="mt-3">Vos résulats de recherche :</h3>
+				<div class="card text-center">
+					<div class="card-body overflow-auto">
+						<div class="row row-cols-1 row-cols-md-6 g-4 overflow-auto">
+							{% for user in users %}
+								<div class="col">
+									<div class="card h-100">
+										<img src="https://www.experts-storistes.com/data/medias/1/style/full/no-img.png" class="card-img-top" alt="photo de la personne">
+										<div class="card-body">
+											<div class="container">
+												{% for userskill in user.userSkills %}
+													{% if userskill.getLiked() %}
+														<span class="badge bg-primary">{{userskill.getSkillId().getName()}}</span>
+													{% else %}
+														<span class="badge bg-danger">{{userskill.getSkillId().getName()}}</span>
+													{% endif %}
+												{% endfor %}
+											</div>
+											<div class="card-body">
+												<h5 class="card-title">{{ user.firstname }}
+													{{ user.lastname }}</h5>
+												{% for usercompany in user.getExperienceId() %}
+													{% if usercompany.endAt|date('dmY') == date()|date('dmY') %}
+														<p>Indisponible</p>
+													{% endif %}
+												{% endfor %}
+												<a class="btn btn-secondary" href="{{ path("user_show", {"id": user.id}) }}">Plus d'informations</a>
+												{% if is_granted("ROLE_SUPER_ADMIN") %}
+													<a class="btn btn-primary" href="{{ path("user_edit_admin", {"id": user.id}) }}">Modifier</a>
+												{% else %}
+													<a class="btn btn-primary" href="{{ path("user_edit_team", {"id": user.id}) }}">Modifier</a>
+												{% endif %}
+											</div>
+										</div>
+									</div>
+								</div>
+							{% endfor %}
+						</div>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	{% endif %}
+{% endblock %}

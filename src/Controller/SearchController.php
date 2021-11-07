@@ -74,7 +74,7 @@ class SearchController extends AbstractController
             $users = $userRepository->findUsersBySkillName($query);
         }
         elseif($query && $choice == 'appetence') {
-            $users = $userRepository->findUsersAppetence($query);
+            $users = $userRepository->findUsersByAppetence($query);
         }
         return $this->render('search/index.html.twig', [
             'users' => $users

@@ -3,11 +3,13 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\Skill;
+use App\Entity\UserSkill;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -41,14 +43,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $qb = $this->createQueryBuilder('u');
         $qb
             ->where(
-                $qb->expr()->andX(
-                    $qb->expr()->orX(
-                        $qb->expr()->like('u.lastname', ':query')
-                    )
+                $qb->expr()->orX(
+                    $qb->expr()->like('u.lastname', ':query'),
+                    $qb->expr()->like('u.firstname', ':query')
                 )
             )
-            ->setParameter('query', '%' . $query . '%')
-        ;
+            ->setParameter('query', '%' . $query . '%');
         return $qb
             ->getQuery()
             ->getResult();
@@ -56,17 +56,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findUsersBySkillName(string $query)
     {
-        $qb = $this->createQueryBuilder('s');
+        $qb = $this->createQueryBuilder('u');
         $qb
+            ->innerJoin(UserSkill::class, 'us', 'WITH', 'us.user_id = u.id')
+            ->innerJoin(Skill::class, 's', 'WITH', 's.id = us.skill_id')
             ->where(
-                $qb->expr()->andX(
-                    $qb->expr()->orX(
                         $qb->expr()->like('s.name', ':query')
-                    )
-                )
             )
-            ->setParameter('query', '%' . $query . '%')
-        ;
+            ->setParameter('query', '%' . $query . '%');
         return $qb
             ->getQuery()
             ->getResult();
@@ -74,18 +71,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findUsersByAppetence(string $query)
     {
-        $qb = $this->createQueryBuilder('s');
+        $qb = $this->createQueryBuilder('u');
         $qb
+            ->innerJoin(UserSkill::class, 'us', 'WITH', 'us.user_id = u.id')
+            ->innerJoin(Skill::class, 's', 'WITH', 's.id = us.skill_id')
             ->where(
-                $qb->expr()->andX(
-                    $qb->expr()->orX(
-                        $qb->expr()->like('u.lastname', ':query')
-                    ),
-                    $qb->expr()->isNotNull('p.created_at')
-                )
+                    $qb->expr()->andX(
+                        $qb->expr()->like('s.name', ':query'),
+                        $qb->expr()->eq('us.liked', 1),
+                    )
             )
-            ->setParameter('query', '%' . $query . '%')
-        ;
+            ->setParameter('query', '%' . $query . '%');
         return $qb
             ->getQuery()
             ->getResult();
